@@ -1,3 +1,6 @@
 {
-    "login" : "login"
+    "welcome_title" : "Welcome to Wiqaya",
+    "welcome_speech" : "Your safety companion for a better tomorrow",
+    "login" : "Login",
+    "register" : "Register"
 }

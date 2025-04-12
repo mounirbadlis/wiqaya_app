@@ -19,8 +19,12 @@ class LocaleProvider extends ChangeNotifier {
     }
   }
 
-  Future<void> setLocale(Locale locale) async {
-    _locale = locale;
+  Future<void> changeLocale() async {
+    if(locale.languageCode == 'en') {
+      _locale = const Locale('ar');
+    } else {
+      _locale = const Locale('en');
+    }
     notifyListeners();
     await _storage.write(key: 'locale', value: locale.languageCode);
   }
