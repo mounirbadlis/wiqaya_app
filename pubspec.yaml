@@ -42,6 +42,10 @@ dependencies:
   flutter_launcher_icons: ^0.14.3
   hugeicons: ^0.0.10
   arabic_font: ^0.0.9
+  flutter_screenutil: ^5.9.3
+  firebase_core: ^3.13.0
+  firebase_messaging: ^15.2.5
+  dio: ^5.8.0+1
 
 dev_dependencies:
   flutter_test:
@@ -68,7 +72,7 @@ flutter:
 
   # To add assets to your application, add an assets section, like this:
   assets:
-    - assets/wiqaya_app_logo.png
+    - assets/logo/wiqaya_app_logo.png
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/to/resolution-aware-images

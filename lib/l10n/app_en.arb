@@ -1,6 +1,18 @@
 {
-    "welcome_title" : "Welcome to Wiqaya",
-    "welcome_speech" : "Your safety companion for a better tomorrow",
-    "login" : "Login",
-    "register" : "Register"
+  "welcome_title": "Welcome to Wiqaya",
+  "welcome_speech": "Your safety companion for a better tomorrow",
+
+  "login": "Login",
+  "register": "Register",
+  "to_register": "Don't have an account? ",
+
+  "email_hint": "Enter your email",
+  "email": "Email",
+  "email_required": "Please enter your email",
+  "email_invalid": "Please enter a valid email",
+
+  "password": "Password",
+  "password_required": "Please enter your password",
+  "password_short": "Password must be at least 6 characters",
+  "password_hint": "Enter your password"
 }

@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "686322123729",
+    "project_id": "wiqaya-e1b01",
+    "storage_bucket": "wiqaya-e1b01.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:686322123729:android:bfe9b200da3c93b1de96f0",
+        "android_client_info": {
+          "package_name": "com.example.wiqaya_app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCuj5v_PUPdGUnC9WKpKo-mGyJLLni63yY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
