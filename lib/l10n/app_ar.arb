@@ -4,6 +4,7 @@
 
   "login": "تسجيل الدخول",
   "register": "إنشاء حساب",
+  "registration_success": "تم التسجيل بنجاح!",
   "to_register": "لا تمتلك حساب؟ ",
 
   "email_hint": "أدخل بريدك الإلكتروني",
@@ -14,5 +15,42 @@
   "password": "كلمة المرور",
   "password_required": "يرجى إدخال كلمة المرور",
   "password_short": "يجب أن تتكون كلمة المرور من 6 أحرف على الأقل",
-  "password_hint": "أدخل كلمة المرور"
+  "password_hint": "أدخل كلمة المرور",
+  
+  "confirm_password": "تأكيد كلمة المرور",
+  "confirm_password_hint": "أعد إدخال كلمة المرور",
+  "confirm_password_required": "تأكيد كلمة المرور مطلوب",
+  "passwords_do_not_match": "كلمتا المرور غير متطابقتين",
+
+  "first_name": "الاسم الأول",
+  "first_name_hint": "أدخل الاسم الأول",
+  "first_name_required": "الاسم الأول مطلوب",
+
+  "family_name": "اسم العائلة",
+  "family_name_hint": "أدخل اسم العائلة",
+  "family_name_required": "اسم العائلة مطلوب",
+
+  "phone": "رقم الهاتف",
+  "phone_hint": "أدخل رقم الهاتف",
+  "phone_required": "رقم الهاتف مطلوب",
+  "phone_invalid": "يجب أن يبدأ رقم الهاتف بـ 05 أو 06 أو 07 ويتكون من 10 أرقام",
+
+  "birth_date": "تاريخ الميلاد",
+  "birth_date_hint": "اختر تاريخ الميلاد",
+  "birth_date_required": "تاريخ الميلاد مطلوب",
+
+  "gender": "الجنس",
+  "gender_hint": "اختر الجنس",
+  "gender_required": "الجنس مطلوب",
+
+  "male": "ذكر",
+  "female": "أنثى",
+
+  "error_email_or_phone_exists": "البريد الإلكتروني أو رقم الهاتف موجود بالفعل",
+  "error_user_not_found": "المستخدم غير موجود",
+  "error_invalid_password": "كلمة المرور غير صحيحة",
+  "error_server": "خطأ في الخادم، يرجى المحاولة لاحقاً",
+  "error_connection": "خطأ في الاتصال، يرجى التحقق من اتصال الإنترنت"
+
+
 }

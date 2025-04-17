@@ -146,7 +146,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         backgroundColor: Theme.of(context).secondaryHeaderColor,
                         padding: EdgeInsets.symmetric(vertical: 14.h),
                       ),
-                      child: Text(
+                      child: _isLoading ? CircularProgressIndicator(color: Colors.white, strokeWidth: 1.sp,) : Text(
                         AppLocalizations.of(context)!.login,
                         style: TextStyle(fontSize: 16.sp, color: Colors.white),
                       ),
@@ -200,6 +200,7 @@ class _LoginScreenState extends State<LoginScreen> {
         await Provider.of<AuthController>(context, listen: false).login(
           _emailController.text.trim(),
           _passwordController.text,
+          context
         );
         Navigator.pushReplacementNamed(context, '/');
       } catch (e) {

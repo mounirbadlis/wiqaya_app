@@ -11,6 +11,7 @@ import 'package:wiqaya_app/controllers/auth_controller.dart';
 import 'package:wiqaya_app/firebase_options.dart';
 import 'package:wiqaya_app/providers/locale_provider.dart';
 import 'package:wiqaya_app/views/auth/login_screen.dart';
+import 'package:wiqaya_app/views/auth/register_screen.dart';
 import 'package:wiqaya_app/views/home_screen.dart';
 import 'package:wiqaya_app/views/splash_screen.dart';
 import 'package:wiqaya_app/views/welcome_screen.dart';
@@ -113,7 +114,7 @@ class MyApp extends StatelessWidget {
         '/splash': (context) => const SplashScreen(),
         '/welcome': (context) => const WelcomeScreen(),
         '/login': (context) => const LoginScreen(),
-        //'/register': (context) => const RegisterScreen(),
+        '/register': (context) => const RegisterScreen(),
       },
     );
   }

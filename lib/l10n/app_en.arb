@@ -4,6 +4,7 @@
 
   "login": "Login",
   "register": "Register",
+  "registration_success": "Registration successful!",
   "to_register": "Don't have an account? ",
 
   "email_hint": "Enter your email",
@@ -14,5 +15,43 @@
   "password": "Password",
   "password_required": "Please enter your password",
   "password_short": "Password must be at least 6 characters",
-  "password_hint": "Enter your password"
+  "password_hint": "Enter your password",
+  
+  "confirm_password": "Confirm Password",
+  "confirm_password_hint": "Re-enter your password",
+  "confirm_password_required": "Confirm password is required",
+  "passwords_do_not_match": "Passwords do not match",
+
+  "first_name": "First Name",
+  "first_name_hint": "Enter your first name",
+  "first_name_required": "First name is required",
+
+  "family_name": "Family Name",
+  "family_name_hint": "Enter your family name",
+  "family_name_required": "Family name is required",
+
+  "phone": "Phone Number",
+  "phone_hint": "Enter your phone number",
+  "phone_required": "Phone number is required",
+  "phone_invalid": "Phone must start with 05, 06, or 07 and be 10 digits long",
+
+
+  "birth_date": "Birth Date",
+  "birth_date_hint": "Select your birth date",
+  "birth_date_required": "Birth date is required",
+
+  "gender": "Gender",
+  "gender_hint": "Select gender",
+  "gender_required": "Gender is required",
+
+  "male": "Male",
+  "female": "Female",
+
+  "error_email_or_phone_exists": "Email or phone already exists",
+  "error_user_not_found": "User not found",
+  "error_invalid_password": "Invalid password",
+  "error_server": "Server error, please try again later",
+  "error_connection": "Connection error, please check your internet connection"
+
+
 }

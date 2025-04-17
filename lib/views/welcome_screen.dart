@@ -72,8 +72,9 @@ class WelcomeScreen extends StatelessWidget {
                 child: OutlinedButton(
                   onPressed: () async {
                     Provider.of<LocaleProvider>(context, listen: false).changeLocale();
-                    await Provider.of<AuthController>(context, listen: false).setDeviceTokenFromFirebase();
-                    print('devicetoken : ${Provider.of<AuthController>(context, listen: false).deviceToken}');
+                    Navigator.pushNamed(context, '/register');
+                    //Provider.of<AuthController>(context, listen: false).setDeviceTokenFromFirebase();
+                    //print('devicetoken : ${Provider.of<AuthController>(context, listen: false).deviceToken}');
                   },
                   style: OutlinedButton.styleFrom(
                     padding: EdgeInsets.symmetric(vertical: 14.h),
