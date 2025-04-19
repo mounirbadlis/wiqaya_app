@@ -18,20 +18,20 @@ import 'package:wiqaya_app/views/welcome_screen.dart';
 
 Future<void> main() async {
   // Initialize the app and Firebase
-  WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
-  FirebaseMessaging messaging = FirebaseMessaging.instance;
+  // WidgetsFlutterBinding.ensureInitialized();
+  // await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+  // FirebaseMessaging messaging = FirebaseMessaging.instance;
 
-  NotificationSettings settings = await messaging.requestPermission(
-    alert: true,
-    announcement: false,
-    badge: true,
-    carPlay: false,
-    criticalAlert: false,
-    provisional: false,
-    sound: true,
-  );
-
+  // NotificationSettings settings = await messaging.requestPermission(
+  //   alert: true,
+  //   announcement: false,
+  //   badge: true,
+  //   carPlay: false,
+  //   criticalAlert: false,
+  //   provisional: false,
+  //   sound: true,
+  // );
+  await setupFCM();
   runApp(
     MultiProvider(
       providers: [
@@ -48,6 +48,38 @@ Future<void> main() async {
       ),
     ),
   );
+}
+
+Future<void> setupFCM() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+  FirebaseMessaging messaging = FirebaseMessaging.instance;
+
+  // Request permissions for iOS
+  messaging.requestPermission();
+
+  // Get the device token
+  messaging.getToken().then((token) {
+    print("FCM Token: $token");
+  });
+
+  NotificationSettings settings = await messaging.requestPermission(
+    alert: true,
+    announcement: false,
+    badge: true,
+    carPlay: false,
+    criticalAlert: false,
+    provisional: false,
+    sound: true,
+  );
+  // Foreground message handler
+  FirebaseMessaging.onMessage.listen((RemoteMessage message) {
+    print('Got a message in foreground!');
+    print('Message data: ${message.data}');
+    if (message.notification != null) {
+      print('Notification: ${message.notification!.title}');
+    }
+  });
 }
 
 class MyApp extends StatelessWidget {

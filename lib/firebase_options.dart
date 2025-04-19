@@ -85,4 +85,5 @@ class DefaultFirebaseOptions {
     storageBucket: 'wiqaya-e1b01.firebasestorage.app',
     measurementId: 'G-DFK8K4E8MF',
   );
+
 }

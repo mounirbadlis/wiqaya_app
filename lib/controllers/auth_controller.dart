@@ -53,9 +53,7 @@ class AuthController extends ChangeNotifier {
       final token = await FirebaseMessaging.instance.getToken();
       if (token != null) {
         _deviceToken = token;
-        print('Device token: $_deviceToken');
         await _storage.write(key: 'device_token', value: _deviceToken);
-        print('Device token saved to storage: $_deviceToken');
       }
     } catch (e) {
       print('Failed to get device token: $e');
@@ -120,7 +118,7 @@ class AuthController extends ChangeNotifier {
   }
 
   Future<void> login(String email, String password, BuildContext context) async {
-    final token = await _storage.read(key: 'device_token');
+    final token = await FirebaseMessaging.instance.getToken();
     print('Device token from storage: $token');
     try {
       final response = await _apiClient.post(
