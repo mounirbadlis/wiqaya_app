@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
 import 'package:wiqaya_app/controllers/auth_controller.dart';
-
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
 
@@ -31,8 +30,18 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Center(
-        child: Image.asset('assets/logo/wiqaya_app_logo.png', width: 150.w, height: 150.h,),
+      backgroundColor: Theme.of(context).secondaryHeaderColor,
+      body: SizedBox(
+        width: double.infinity,
+        height: double.infinity,
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Image.asset('assets/logo/wiqaya_app_logo_white.png', width: 150.w, height: 150.h,),
+            Text('Wiqaya', style: TextTheme.of(context).headlineLarge!.copyWith(color: Colors.white))
+          ],
+        ),
       ),
     );
   }

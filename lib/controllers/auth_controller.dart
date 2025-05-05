@@ -4,6 +4,7 @@ import 'package:dio/dio.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:wiqaya_app/api/api_client.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:wiqaya_app/models/user.dart';
 
 class AuthController extends ChangeNotifier {
   final _storage = const FlutterSecureStorage();
@@ -12,10 +13,12 @@ class AuthController extends ChangeNotifier {
   String? _accessToken;
   String? _refreshToken;
   String? _deviceToken;
+  User? _user;
 
   String? get accessToken => _accessToken;
   String? get refreshToken => _refreshToken;
   String? get deviceToken => _deviceToken;
+  User? get user => _user;
 
   Future<bool> init() async {
     setDeviceTokenFromFirebase();
@@ -38,10 +41,12 @@ class AuthController extends ChangeNotifier {
           await logout();
           return true;
         }
+        _user = User.fromJson(response.data['user']);
         _accessToken = response.data['access_token'];
         await _storage.write(key: 'access_token', value: _accessToken);
         return false;
       } on DioException catch (e) {
+        print('refresh token failed: $e');
         await logout();
         return true;
       }
@@ -61,13 +66,14 @@ class AuthController extends ChangeNotifier {
   }
 
   Future<void> register({
+    required String email,
+    required String password,
     required String firstName,
     required String familyName,
     required String birthDate,
-    required int gender,
-    required String email,
-    required String password,
     required String phone,
+    required int gender,
+    required String bloodType,
     required BuildContext context,
   }) async {
     final token = await _storage.read(key: 'device_token');
@@ -84,6 +90,7 @@ class AuthController extends ChangeNotifier {
           'birth_date': birthDate,
           'phone': phone,
           'gender': gender,
+          'blood_type': bloodType,
           'role': 3,
           'type': 1,
           'device_token': token
@@ -101,6 +108,7 @@ class AuthController extends ChangeNotifier {
 
         notifyListeners();
       } else {
+        print('Unexpected response from server: ${response.data}');
         throw Exception('Unexpected response from server');
       }
     } on DioException catch (e) {
@@ -129,7 +137,8 @@ class AuthController extends ChangeNotifier {
           'device_token': token,
         },
       );
-      print('Login response: ${response.data}');
+
+      _user = User.fromJson(response.data['user']);
       _accessToken = response.data['access_token'];
       _refreshToken = response.data['refreshToken'];
 

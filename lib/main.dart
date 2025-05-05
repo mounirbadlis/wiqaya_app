@@ -72,7 +72,7 @@ Future<void> setupFCM() async {
     provisional: false,
     sound: true,
   );
-  // Foreground message handler
+  // Foreground message handler<<
   FirebaseMessaging.onMessage.listen((RemoteMessage message) {
     print('Got a message in foreground!');
     print('Message data: ${message.data}');

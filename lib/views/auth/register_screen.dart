@@ -24,7 +24,12 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
   DateTime? _selectedBirthDate;
   int? _selectedGender;
+  String? _selectedBloodType;
   bool _obscurePassword = true;
+
+  final List<String> _bloodTypes = [
+    'A+', 'A-', 'B+', 'B-', 'AB+', 'AB-', 'O+', 'O-'
+  ];
 
   @override
   void dispose() {
@@ -41,211 +46,248 @@ class _RegisterScreenState extends State<RegisterScreen> {
   Widget build(BuildContext context) {
     final loc = AppLocalizations.of(context)!;
 
-    return Scaffold(
-      body: SafeArea(
-        child: SingleChildScrollView(
-          padding: EdgeInsets.symmetric(horizontal: 20.w),
-          child: Form(
-            key: _formKey,
-            child: Column(
-              children: [
-                SizedBox(height: 24.h),
-                Image.asset(
-                  'assets/logo/wiqaya_app_logo.png',
-                  width: 130.w,
-                  height: 130.h,
-                ),
-                SizedBox(height: 20.h),
-                SizedBox(
-                  width: double.infinity,
-                  child: Text(
-                    loc.register,
-                    textAlign: TextAlign.start,
-                    style: Theme.of(context).textTheme.headlineLarge,
+    return PopScope(
+      canPop: false,
+      onPopInvokedWithResult: (didPop,result) {
+        if(!didPop) { Navigator.pushNamed(context, '/welcome');}
+      },
+      child: Scaffold(
+        body: SafeArea(
+          child: SingleChildScrollView(
+            padding: EdgeInsets.symmetric(horizontal: 20.w),
+            child: Form(
+              key: _formKey,
+              child: Column(
+                children: [
+                  SizedBox(height: 24.h),
+                  Image.asset(
+                    'assets/logo/wiqaya_app_logo.png',
+                    width: 130.w,
+                    height: 130.h,
                   ),
-                ),
-                SizedBox(height: 24.h),
-
-                // Email
-                _buildLabel(loc.email),
-                _buildTextField(
-                  controller: _emailController,
-                  hint: loc.email_hint,
-                  validatorMsg: loc.email_required,
-                  keyboardType: TextInputType.emailAddress,
-                  validateEmail: true,
-                ),
-
-                // First Name
-                _buildLabel(loc.first_name),
-                _buildTextField(
-                  controller: _firstNameController,
-                  hint: loc.first_name_hint,
-                  validatorMsg: loc.first_name_required,
-                ),
-
-                // Last Name
-                _buildLabel(loc.family_name),
-                _buildTextField(
-                  controller: _lastNameController,
-                  hint: loc.family_name_hint,
-                  validatorMsg: loc.family_name_required,
-                ),
-
-                // Phone
-                _buildLabel(loc.phone),
-                _buildTextField(
-                  controller: _phoneController,
-                  hint: loc.phone_hint,
-                  validatorMsg: loc.phone_required,
-                  keyboardType: TextInputType.phone,
-                  phoneValidation: true,
-                ),
-
-                // Password
-                _buildLabel(loc.password),
-                TextFormField(
-                  controller: _passwordController,
-                  obscureText: _obscurePassword,
-                  decoration: InputDecoration(
-                    hintText: loc.password_hint,
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(30.r),
-                    ),
-                    contentPadding: EdgeInsets.symmetric(
-                      vertical: 14.h,
-                      horizontal: 12.w,
-                    ),
-                    suffixIcon: IconButton(
-                      icon: Icon(
-                        _obscurePassword
-                            ? HugeIcons.strokeRoundedViewOffSlash
-                            : HugeIcons.strokeRoundedView,
-                      ),
-                      onPressed:
-                          () => setState(
-                            () => _obscurePassword = !_obscurePassword,
-                          ),
-                    ),
-                  ),
-                  validator:
-                      (value) =>
-                          value == null || value.isEmpty
-                              ? loc.password_required
-                              : null,
-                ),
-                SizedBox(height: 20.h),
-
-                // Confirm Password
-                _buildLabel(loc.confirm_password),
-                TextFormField(
-                  controller: _confirmPasswordController,
-                  obscureText: _obscurePassword,
-                  decoration: InputDecoration(
-                    hintText: loc.confirm_password_hint,
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(30.r),
-                    ),
-                    contentPadding: EdgeInsets.symmetric(
-                      vertical: 14.h,
-                      horizontal: 12.w,
-                    ),
-                    suffixIcon: IconButton(
-                      icon: Icon(
-                        _obscurePassword
-                            ? HugeIcons.strokeRoundedViewOffSlash
-                            : HugeIcons.strokeRoundedView,
-                      ),
-                      onPressed:
-                          () => setState(
-                            () => _obscurePassword = !_obscurePassword,
-                          ),
-                    ),
-                  ),
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return loc.confirm_password_required;
-                    } else if (value != _passwordController.text) {
-                      return loc.passwords_do_not_match;
-                    }
-                    return null;
-                  },
-                ),
-                SizedBox(height: 20.h),
-
-                // Birth Date
-                _buildLabel(loc.birth_date),
-                GestureDetector(
-                  onTap: () => _selectBirthDate(context),
-                  child: AbsorbPointer(
-                    child: TextFormField(
-                      decoration: InputDecoration(
-                        hintText: loc.birth_date_hint,
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(30.r),
-                        ),
-                        contentPadding: EdgeInsets.symmetric(
-                          vertical: 14.h,
-                          horizontal: 12.w,
-                        ),
-                      ),
-                      controller: TextEditingController(
-                        text:
-                            _selectedBirthDate == null
-                                ? ''
-                                : DateFormat.yMd().format(_selectedBirthDate!),
-                      ),
-                      validator:
-                          (value) =>
-                              _selectedBirthDate == null
-                                  ? loc.birth_date_required
-                                  : null,
-                    ),
-                  ),
-                ),
-                SizedBox(height: 20.h),
-
-                // Gender
-                _buildLabel(loc.gender),
-                DropdownButtonFormField<int>(
-                  value: _selectedGender,
-                  items: [
-                    DropdownMenuItem(value: 1, child: Text(loc.male)),
-                    DropdownMenuItem(value: 2, child: Text(loc.female)),
-                  ],
-                  decoration: InputDecoration(
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(30.r),
-                    ),
-                    contentPadding: EdgeInsets.symmetric(
-                      vertical: 14.h,
-                      horizontal: 12.w,
-                    ),
-                  ),
-                  hint: Text(loc.gender_hint),
-                  onChanged: (value) => setState(() => _selectedGender = value),
-                  validator:
-                      (value) => value == null ? loc.gender_required : null,
-                ),
-                SizedBox(height: 32.h),
-
-                // Register Button
-                SizedBox(
-                  width: double.infinity,
-                  child: ElevatedButton(
-                    onPressed: _submit,
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Theme.of(context).secondaryHeaderColor,
-                      padding: EdgeInsets.symmetric(vertical: 14.h),
-                    ),
+                  SizedBox(height: 20.h),
+                  SizedBox(
+                    width: double.infinity,
                     child: Text(
                       loc.register,
-                      style: TextStyle(fontSize: 16.sp, color: Colors.white),
+                      textAlign: TextAlign.start,
+                      style: Theme.of(context).textTheme.headlineLarge,
                     ),
                   ),
-                ),
-                SizedBox(height: 16.h),
-              ],
+                  SizedBox(height: 24.h),
+      
+                  // Email
+                  _buildLabel(loc.email),
+                  _buildTextField(
+                    controller: _emailController,
+                    hint: loc.email_hint,
+                    validatorMsg: loc.email_required,
+                    keyboardType: TextInputType.emailAddress,
+                    validateEmail: true,
+                  ),
+      
+                  // First Name
+                  _buildLabel(loc.first_name),
+                  _buildTextField(
+                    controller: _firstNameController,
+                    hint: loc.first_name_hint,
+                    validatorMsg: loc.first_name_required,
+                  ),
+      
+                  // Last Name
+                  _buildLabel(loc.family_name),
+                  _buildTextField(
+                    controller: _lastNameController,
+                    hint: loc.family_name_hint,
+                    validatorMsg: loc.family_name_required,
+                  ),
+      
+                  // Phone
+                  _buildLabel(loc.phone),
+                  _buildTextField(
+                    controller: _phoneController,
+                    hint: loc.phone_hint,
+                    validatorMsg: loc.phone_required,
+                    keyboardType: TextInputType.phone,
+                    phoneValidation: true,
+                  ),
+
+                  // Blood Type
+                  _buildLabel('Blood Type'),
+                  Container(
+                    width: double.infinity,
+                    padding: EdgeInsets.symmetric(horizontal: 12.w),
+                    decoration: BoxDecoration(
+                      border: Border.all(color: Theme.of(context).colorScheme.outline),
+                      borderRadius: BorderRadius.circular(30.r),
+                    ),
+                    child: DropdownButtonFormField<String>(
+                      value: _selectedBloodType,
+                      decoration: const InputDecoration(
+                        border: InputBorder.none,
+                      ),
+                      hint: Text('Select Blood Type'),
+                      validator: (value) => value == null ? 'Blood type is required' : null,
+                      items: _bloodTypes.map((String type) {
+                        return DropdownMenuItem<String>(
+                          value: type,
+                          child: Text(type),
+                        );
+                      }).toList(),
+                      onChanged: (String? newValue) {
+                        setState(() {
+                          _selectedBloodType = newValue;
+                        });
+                      },
+                    ),
+                  ),
+                  SizedBox(height: 20.h),
+
+                  // Password
+                  _buildLabel(loc.password),
+                  TextFormField(
+                    controller: _passwordController,
+                    obscureText: _obscurePassword,
+                    decoration: InputDecoration(
+                      hintText: loc.password_hint,
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(30.r),
+                      ),
+                      contentPadding: EdgeInsets.symmetric(
+                        vertical: 14.h,
+                        horizontal: 12.w,
+                      ),
+                      suffixIcon: IconButton(
+                        icon: Icon(
+                          _obscurePassword
+                              ? HugeIcons.strokeRoundedViewOffSlash
+                              : HugeIcons.strokeRoundedView,
+                        ),
+                        onPressed:
+                            () => setState(
+                              () => _obscurePassword = !_obscurePassword,
+                            ),
+                      ),
+                    ),
+                    validator:
+                        (value) =>
+                            value == null || value.isEmpty
+                                ? loc.password_required
+                                : null,
+                  ),
+                  SizedBox(height: 20.h),
+      
+                  // Confirm Password
+                  _buildLabel(loc.confirm_password),
+                  TextFormField(
+                    controller: _confirmPasswordController,
+                    obscureText: _obscurePassword,
+                    decoration: InputDecoration(
+                      hintText: loc.confirm_password_hint,
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(30.r),
+                      ),
+                      contentPadding: EdgeInsets.symmetric(
+                        vertical: 14.h,
+                        horizontal: 12.w,
+                      ),
+                      suffixIcon: IconButton(
+                        icon: Icon(
+                          _obscurePassword
+                              ? HugeIcons.strokeRoundedViewOffSlash
+                              : HugeIcons.strokeRoundedView,
+                        ),
+                        onPressed:
+                            () => setState(
+                              () => _obscurePassword = !_obscurePassword,
+                            ),
+                      ),
+                    ),
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return loc.confirm_password_required;
+                      } else if (value != _passwordController.text) {
+                        return loc.passwords_do_not_match;
+                      }
+                      return null;
+                    },
+                  ),
+                  SizedBox(height: 20.h),
+      
+                  // Birth Date
+                  _buildLabel(loc.birth_date),
+                  GestureDetector(
+                    onTap: () => _selectBirthDate(context),
+                    child: AbsorbPointer(
+                      child: TextFormField(
+                        decoration: InputDecoration(
+                          hintText: loc.birth_date_hint,
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(30.r),
+                          ),
+                          contentPadding: EdgeInsets.symmetric(
+                            vertical: 14.h,
+                            horizontal: 12.w,
+                          ),
+                        ),
+                        controller: TextEditingController(
+                          text:
+                              _selectedBirthDate == null
+                                  ? ''
+                                  : DateFormat.yMd().format(_selectedBirthDate!),
+                        ),
+                        validator:
+                            (value) =>
+                                _selectedBirthDate == null
+                                    ? loc.birth_date_required
+                                    : null,
+                      ),
+                    ),
+                  ),
+                  SizedBox(height: 20.h),
+      
+                  // Gender
+                  _buildLabel(loc.gender),
+                  DropdownButtonFormField<int>(
+                    value: _selectedGender,
+                    items: [
+                      DropdownMenuItem(value: 1, child: Text(loc.male)),
+                      DropdownMenuItem(value: 2, child: Text(loc.female)),
+                    ],
+                    decoration: InputDecoration(
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(30.r),
+                      ),
+                      contentPadding: EdgeInsets.symmetric(
+                        vertical: 14.h,
+                        horizontal: 12.w,
+                      ),
+                    ),
+                    hint: Text(loc.gender_hint),
+                    onChanged: (value) => setState(() => _selectedGender = value),
+                    validator:
+                        (value) => value == null ? loc.gender_required : null,
+                  ),
+                  SizedBox(height: 32.h),
+      
+                  // Register Button
+                  SizedBox(
+                    width: double.infinity,
+                    child: ElevatedButton(
+                      onPressed: _submit,
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Theme.of(context).secondaryHeaderColor,
+                        padding: EdgeInsets.symmetric(vertical: 14.h),
+                      ),
+                      child: Text(
+                        loc.register,
+                        style: TextStyle(fontSize: 16.sp, color: Colors.white),
+                      ),
+                    ),
+                  ),
+                  SizedBox(height: 16.h),
+                ],
+              ),
             ),
           ),
         ),
@@ -351,13 +393,14 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
       try {
         await Provider.of<AuthController>(context, listen: false).register(
+          email: email,
+          password: password,
           firstName: firstName,
           familyName: familyName,
           birthDate: birthDate,
-          gender: gender,
-          email: email,
-          password: password,
           phone: phone,
+          gender: gender,
+          bloodType: _selectedBloodType!,
           context: context,
         );
 

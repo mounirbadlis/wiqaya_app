@@ -6,7 +6,7 @@ class ApiClient {
   final _storage = const FlutterSecureStorage();
 
   ApiClient() {
-    dio.options.baseUrl = 'http://192.168.174.165:3000';
+    dio.options.baseUrl = 'http://192.168.155.165:3001';
     dio.options.connectTimeout = const Duration(seconds: 15);
     dio.options.receiveTimeout = const Duration(seconds: 15);
 
@@ -20,7 +20,7 @@ class ApiClient {
           return handler.next(options);
         },
         onError: (DioException error, handler) async {
-          if (error.response?.statusCode == 401) {
+          if (error.response?.statusCode == 401 || error.response?.statusCode == 403) {
             // Token might be expired
             final refreshToken = await _storage.read(key: 'refresh_token');
             if (refreshToken != null) {

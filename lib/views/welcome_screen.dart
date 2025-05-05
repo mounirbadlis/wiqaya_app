@@ -11,83 +11,86 @@ class WelcomeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: SafeArea(
-        child: Padding(
-          padding: EdgeInsets.symmetric(horizontal: 20.w),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              const Spacer(),
-
-              // Logo
-              Image.asset(
-                'assets/logo/wiqaya_app_logo.png',
-                width: 150.w,
-                height: 150.h,
-              ),
-
-              Text(
-                AppLocalizations.of(context)!.welcome_title,
-                style: Theme.of(context).textTheme.headlineMedium?.copyWith(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 24.sp,
+    return PopScope(
+      canPop: false,
+      onPopInvokedWithResult: (didPop,result) {
+        if(!didPop) {return;}
+      },
+      child: Scaffold(
+        body: SafeArea(
+          child: Padding(
+            padding: EdgeInsets.symmetric(horizontal: 20.w),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                const Spacer(),
+      
+                // Logo
+                Image.asset(
+                  'assets/logo/wiqaya_app_logo.png',
+                  width: 150.w,
+                  height: 150.h,
+                ),
+      
+                Text(
+                  AppLocalizations.of(context)!.welcome_title,
+                  style: Theme.of(context).textTheme.headlineMedium?.copyWith(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 24.sp,
+                      ),
+                ),
+      
+                SizedBox(height: 20.h),
+      
+                Text(
+                  AppLocalizations.of(context)!.welcome_speech,
+                  textAlign: TextAlign.center,
+                  style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                        fontSize: 16.sp,
+                      ),
+                ),
+      
+                const Spacer(),
+      
+                // Buttons
+                SizedBox(
+                  width: double.infinity,
+                  child: ElevatedButton(
+                    onPressed: () {
+                      Navigator.pushNamed(context, '/login');
+                    },
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Theme.of(context).secondaryHeaderColor,
+                      padding: EdgeInsets.symmetric(vertical: 14.h),
                     ),
-              ),
-
-              SizedBox(height: 20.h),
-
-              Text(
-                AppLocalizations.of(context)!.welcome_speech,
-                textAlign: TextAlign.center,
-                style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                      fontSize: 16.sp,
+                    child: Text(
+                      AppLocalizations.of(context)!.login,
+                      style: TextStyle(color: Colors.white, fontSize: 16.sp),
                     ),
-              ),
-
-              const Spacer(),
-
-              // Buttons
-              SizedBox(
-                width: double.infinity,
-                child: ElevatedButton(
-                  onPressed: () {
-                    Navigator.pushNamed(context, '/login');
-                  },
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Theme.of(context).secondaryHeaderColor,
-                    padding: EdgeInsets.symmetric(vertical: 14.h),
-                  ),
-                  child: Text(
-                    AppLocalizations.of(context)!.login,
-                    style: TextStyle(color: Colors.white, fontSize: 16.sp),
                   ),
                 ),
-              ),
-
-              SizedBox(height: 16.h),
-
-              SizedBox(
-                width: double.infinity,
-                child: OutlinedButton(
-                  onPressed: () async {
-                    Provider.of<LocaleProvider>(context, listen: false).changeLocale();
-                    Navigator.pushNamed(context, '/register');
-                    //Provider.of<AuthController>(context, listen: false).setDeviceTokenFromFirebase();
-                    //print('devicetoken : ${Provider.of<AuthController>(context, listen: false).deviceToken}');
-                  },
-                  style: OutlinedButton.styleFrom(
-                    padding: EdgeInsets.symmetric(vertical: 14.h),
-                  ),
-                  child: Text(
-                    AppLocalizations.of(context)!.register,
-                    style: TextStyle(color: Colors.black, fontSize: 16.sp),
+      
+                SizedBox(height: 16.h),
+      
+                SizedBox(
+                  width: double.infinity,
+                  child: OutlinedButton(
+                    onPressed: () async {
+                      Navigator.pushNamed(context, '/register');
+                    },
+                    style: OutlinedButton.styleFrom(
+                      padding: EdgeInsets.symmetric(vertical: 14.h),
+                    ),
+                    child: Text(
+                      AppLocalizations.of(context)!.register,
+                      style: TextStyle(color: Colors.black, fontSize: 16.sp),
+                    ),
                   ),
                 ),
-              ),
-
-              SizedBox(height: 32.h),
-            ],
+      
+                SizedBox(height: 32.h),
+              ],
+            ),
           ),
         ),
       ),
