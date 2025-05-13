@@ -5,9 +5,10 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:wiqaya_app/api/api_client.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:wiqaya_app/models/user.dart';
+import 'package:wiqaya_app/services/secure_storage_service.dart';
 
 class AuthController extends ChangeNotifier {
-  final _storage = const FlutterSecureStorage();
+  final _secureStorage = SecureStorageService();
   final ApiClient _apiClient = ApiClient();
 
   String? _accessToken;
@@ -23,12 +24,15 @@ class AuthController extends ChangeNotifier {
   Future<bool> init() async {
     setDeviceTokenFromFirebase();
 
-    _accessToken = await _storage.read(key: 'access_token');
-    _refreshToken = await _storage.read(key: 'refresh_token');
+    _accessToken = await _secureStorage.read('access_token');
+    _refreshToken = await _secureStorage.read('refresh_token').then((value) {
+      print('refresh token: $value');
+      return value;
+    });
+    print('refresh token: $_refreshToken');
 
     if (_refreshToken == null) {
       _accessToken = null;
-      print('1');
       return true;
     } else {
       try {
@@ -37,13 +41,13 @@ class AuthController extends ChangeNotifier {
           data: {'refresh_token': _refreshToken},
         );
         if (response.statusCode == 403) {
-          print('2');
           await logout();
           return true;
         }
+        User.user = User.fromJson(response.data['user']);
         _user = User.fromJson(response.data['user']);
         _accessToken = response.data['access_token'];
-        await _storage.write(key: 'access_token', value: _accessToken);
+        await _secureStorage.write('access_token', _accessToken!);
         return false;
       } on DioException catch (e) {
         print('refresh token failed: $e');
@@ -58,7 +62,7 @@ class AuthController extends ChangeNotifier {
       final token = await FirebaseMessaging.instance.getToken();
       if (token != null) {
         _deviceToken = token;
-        await _storage.write(key: 'device_token', value: _deviceToken);
+        await _secureStorage.write('device_token', _deviceToken!);
       }
     } catch (e) {
       print('Failed to get device token: $e');
@@ -76,7 +80,7 @@ class AuthController extends ChangeNotifier {
     required String bloodType,
     required BuildContext context,
   }) async {
-    final token = await _storage.read(key: 'device_token');
+    final token = await _secureStorage.read('device_token');
     print('Device token from storage: $token');
 
     try {
@@ -99,12 +103,13 @@ class AuthController extends ChangeNotifier {
 
       if (response.statusCode == 201) {
         print('Registration successful: ${response.data}');
-        _accessToken = response.data['access_token'];
+        _user = User.fromJson(response.data['user']);
+        User.user = User.fromJson(response.data['user']);
+        _accessToken = response.data['accessToken'];
         _refreshToken = response.data['refreshToken'];
-
-        await _storage.write(key: 'access_token', value: _accessToken);
-        await _storage.write(key: 'refresh_token', value: _refreshToken);
-        await _storage.write(key: 'device_token', value: token);
+        await _secureStorage.write('access_token', _accessToken!);
+        await _secureStorage.write('refresh_token', _refreshToken!);
+        await _secureStorage.write('device_token', token!);
 
         notifyListeners();
       } else {
@@ -127,6 +132,7 @@ class AuthController extends ChangeNotifier {
 
   Future<void> login(String email, String password, BuildContext context) async {
     final token = await FirebaseMessaging.instance.getToken();
+    _deviceToken = token;
     print('Device token from storage: $token');
     try {
       final response = await _apiClient.post(
@@ -134,19 +140,20 @@ class AuthController extends ChangeNotifier {
         data: {
           'email': email,
           'password': password,
-          'device_token': token,
+          'device_token': _deviceToken,
         },
       );
-
       _user = User.fromJson(response.data['user']);
-      _accessToken = response.data['access_token'];
+      User.user = _user;
+      _accessToken = response.data['accessToken'];
       _refreshToken = response.data['refreshToken'];
 
-      await _storage.write(key: 'access_token', value: _accessToken);
-      await _storage.write(key: 'refresh_token', value: _refreshToken);
-      await _storage.write(key: 'device_token', value: _deviceToken);
+      await _secureStorage.write('access_token', _accessToken!);
+      await _secureStorage.write('refresh_token', _refreshToken!);
+      await _secureStorage.write('device_token', _deviceToken!);
       notifyListeners();
     } on DioException catch (e) {
+      print('Error from server: ${e.response?.data}');
       final status = e.response?.statusCode;
       if (status == 404) {
         throw Exception(AppLocalizations.of(context)!.error_user_not_found);
@@ -170,20 +177,20 @@ class AuthController extends ChangeNotifier {
       );
     } catch (_) {}
 
-    await _storage.delete(key: 'access_token');
-    await _storage.delete(key: 'refresh_token');
-    await _storage.delete(key: 'device_token');
+    await _secureStorage.delete('access_token');
+    await _secureStorage.delete('refresh_token');
+    await _secureStorage.delete('device_token');
 
     _accessToken = null;
     _refreshToken = null;
     _deviceToken = null;
-
+    
     notifyListeners();
   }
 
   Future<bool> isLoggedIn() async {
-    _accessToken = await _storage.read(key: 'access_token');
-    _refreshToken = await _storage.read(key: 'refresh_token');
+    _accessToken = await _secureStorage.read('access_token');
+    _refreshToken = await _secureStorage.read('refresh_token');
     return _accessToken != null;
   }
 }

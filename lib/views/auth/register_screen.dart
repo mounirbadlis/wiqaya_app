@@ -113,7 +113,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   ),
 
                   // Blood Type
-                  _buildLabel('Blood Type'),
+                  _buildLabel(loc.blood_type),
                   Container(
                     width: double.infinity,
                     padding: EdgeInsets.symmetric(horizontal: 12.w),
@@ -126,8 +126,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       decoration: const InputDecoration(
                         border: InputBorder.none,
                       ),
-                      hint: Text('Select Blood Type'),
-                      validator: (value) => value == null ? 'Blood type is required' : null,
+                      hint: Text(loc.blood_type_hint),
+                      validator: (value) => value == null ? loc.blood_type_required : null,
                       items: _bloodTypes.map((String type) {
                         return DropdownMenuItem<String>(
                           value: type,
@@ -407,7 +407,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
         if (mounted) {
           Navigator.of(context).pop(); // close loader
           _showSnackBar(AppLocalizations.of(context)!.registration_success);
-          Navigator.pushReplacementNamed(context, '/');
+          Navigator.pushReplacementNamed(context, '/main');
           // Navigate to another screen if needed
         }
       } catch (e) {

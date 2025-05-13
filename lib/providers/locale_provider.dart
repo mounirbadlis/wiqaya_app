@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:wiqaya_app/services/secure_storage_service.dart';
 
 class LocaleProvider extends ChangeNotifier {
-  final FlutterSecureStorage _storage = const FlutterSecureStorage();
+  final _secureStorage = SecureStorageService();
   Locale _locale = const Locale('en');
 
   Locale get locale => _locale;
@@ -12,11 +13,12 @@ class LocaleProvider extends ChangeNotifier {
   }
 
   Future<void> _loadSavedLocale() async {
-    final code = await _storage.read(key: 'locale');
+    final code = await _secureStorage.read('locale');
     if (code != null) {
       _locale = Locale(code);
       notifyListeners();
     }
+
   }
 
   Future<void> changeLocale() async {
@@ -26,6 +28,13 @@ class LocaleProvider extends ChangeNotifier {
       _locale = const Locale('en');
     }
     notifyListeners();
-    await _storage.write(key: 'locale', value: locale.languageCode);
+    await _secureStorage.write('locale', locale.languageCode);
   }
+
+  Future<void> setLocale(Locale locale) async {
+    _locale = locale;
+    notifyListeners();
+    await _secureStorage.write('locale', locale.languageCode);
+  }
+
 }

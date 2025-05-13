@@ -226,7 +226,7 @@ class _LoginScreenState extends State<LoginScreen> {
           _passwordController.text,
           context,
         );
-        Navigator.pushReplacementNamed(context, '/');
+        Navigator.pushReplacementNamed(context, '/main');
       } catch (e) {
         _showSnackBar(e.toString().replaceFirst('Exception: ', ''));
       } finally {

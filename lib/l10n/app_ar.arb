@@ -35,6 +35,10 @@
   "phone_required": "رقم الهاتف مطلوب",
   "phone_invalid": "يجب أن يبدأ رقم الهاتف بـ 05 أو 06 أو 07 ويتكون من 10 أرقام",
 
+  "blood_type": "فصيلة الدم",
+  "blood_type_hint": "اختر فصيلة الدم",
+  "blood_type_required": "فصيلة الدم مطلوبة",
+
   "birth_date": "تاريخ الميلاد",
   "birth_date_hint": "اختر تاريخ الميلاد",
   "birth_date_required": "تاريخ الميلاد مطلوب",
@@ -52,46 +56,43 @@
   "error_server": "خطأ في الخادم، يرجى المحاولة لاحقاً",
   "error_connection": "خطأ في الاتصال، يرجى التحقق من اتصال الإنترنت",
 
+  "retry": "إعادة المحاولة",
 
-
-
-  "@@locale": "ar",
-  "homeScreenTitle": "الرئيسية",
-  "welcome": "مرحباً",
-  "welcomeSubtitle": "تتبع حالتك الصحية والمواعيد",
-  "bloodType": "فصيلة الدم",
-  "age": "العمر",
-  "healthDashboard": "لوحة المعلومات الصحية",
-  "health": "الصحة",
-  "status": "الحالة",
-  "active": "نشط",
-  "quickActions": "إجراءات سريعة",
+  "home": "الرئيسية",
   "appointments": "المواعيد",
-  "medications": "الأدوية",
-  "history": "السجل",
+  "my_children": "أطفالي",
+  "record": "السجل",
+  "vaccines": "اللقاحات",
+
+  "welcome": "مرحبًا",
+  "blood_type": "فصيلة الدم",
+  "age": "العمر",
+  "quick_actions": "إجراءات سريعة",
   "profile": "الملف الشخصي",
-  "recentActivities": "الأنشطة الأخيرة",
-  "appointmentScheduled": "تم جدولة موعد",
-  "withDrName": "مع د. محمد",
-  "medicationReminder": "تذكير بالدواء",
-  "takeMedication": "تناول الدواء الخاص بك",
-  "healthCheckup": "فحص صحي",
-  "bloodPressureNormal": "ضغط الدم طبيعي",
-  "changeLanguage": "تغيير اللغة",
+  "recent_activities": "الأنشطة الأخيرة",
   "notifications": "الإشعارات",
   "settings": "الإعدادات",
+
+  "birth": "عند الولادة",
+  "month": "شهر",
+  "months": "شهور",
+  "vaccine": "لقاح",
+  "required_ages": "العمر المطلوب",
+
+  "add_child": "إضافة إبن",
+
   "logout": "تسجيل الخروج",
-  "darkMode": "الوضع الداكن",
-  "lightMode": "الوضع الفاتح",
-  "personalInfo": "المعلومات الشخصية",
-  "medicalRecords": "السجلات الطبية",
-  "emergencyContacts": "جهات اتصال الطوارئ",
-  "helpAndSupport": "المساعدة والدعم",
-  "termsOfService": "شروط الخدمة",
-  "privacyPolicy": "سياسة الخصوصية",
-  "myAccount": "حسابي",
-  "editProfile": "تعديل الملف الشخصي",
+  "cancel": "إلغاء",
+  "logout_dialog_content": "هل أنت متأكد من تسجيل الخروج؟",
+
+  "personal_info": "المعلومات الشخصية",
+  "my_account": "حسابي",
+  "edit_profile": "تعديل الملف الشخصي",
+
   "language": "اللغة",
+  "select_language": "اختر اللغة",
   "english": "الإنجليزية",
-  "arabic": "العربية"
+  "arabic": "العربية",
+
+  "next": "التالي"
 }

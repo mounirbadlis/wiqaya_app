@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
 import 'package:wiqaya_app/controllers/auth_controller.dart';
+
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
 
@@ -17,13 +18,13 @@ class _SplashScreenState extends State<SplashScreen> {
   }
 
   void _checkAuth() async {
-    await Future.delayed(const Duration(seconds: 3), () {});
+    await Future.delayed(const Duration(seconds: 1), () {});
     final authController = Provider.of<AuthController>(context, listen: false);
     bool shouldRedicrect = await authController.init();
     if(shouldRedicrect) {
       Navigator.pushReplacementNamed(context, '/welcome');
     } else {
-      Navigator.pushReplacementNamed(context, '/');
+      Navigator.pushReplacementNamed(context, '/main');
     }
   }
 

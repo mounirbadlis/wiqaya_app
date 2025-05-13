@@ -35,6 +35,10 @@
   "phone_required": "Phone number is required",
   "phone_invalid": "Phone must start with 05, 06, or 07 and be 10 digits long",
 
+  "blood_type": "Blood Type",
+  "blood_type_hint": "Select your blood type",
+  "blood_type_required": "Blood type is required",
+
 
   "birth_date": "Birth Date",
   "birth_date_hint": "Select your birth date",
@@ -53,45 +57,43 @@
   "error_server": "Server error, please try again later",
   "error_connection": "Connection error, please check your internet connection",
 
+  "retry": "Retry",
 
-
-
-  "homeScreenTitle": "Home",
-  "welcome": "Welcome",
-  "welcomeSubtitle": "Track your health status and appointments",
-  "bloodType": "Blood Type",
-  "age": "Age",
-  "healthDashboard": "Health Dashboard",
-  "health": "Health",
-  "status": "Status",
-  "active": "Active",
-  "quickActions": "Quick Actions",
+  "home": "Home",
   "appointments": "Appointments",
-  "medications": "Medications",
-  "history": "History",
+  "my_children": "My Children",
+  "record": "Record",
+  "vaccines": "Vaccines",
+
+  "welcome": "Welcome",
+  "blood_type": "Blood Type",
+  "age": "Age",
+  "quick_actions": "Quick Actions",
   "profile": "Profile",
-  "recentActivities": "Recent Activities",
-  "appointmentScheduled": "Appointment Scheduled",
-  "withDrName": "with Dr. Mohammad",
-  "medicationReminder": "Medication Reminder",
-  "takeMedication": "Take your medication",
-  "healthCheckup": "Health Checkup",
-  "bloodPressureNormal": "Blood pressure normal",
-  "changeLanguage": "Change Language",
+  "recent_activities": "Recent Activities",
   "notifications": "Notifications",
   "settings": "Settings",
+
+  "birth": "Birth",
+  "month": "Month",
+  "months": "Months",
+  "vaccine": "Vaccine",
+  "required_ages": "Required Ages",
+
+  "add_child": "Add Child",
+
   "logout": "Logout",
-  "darkMode": "Dark Mode",
-  "lightMode": "Light Mode",
-  "personalInfo": "Personal Information",
-  "medicalRecords": "Medical Records",
-  "emergencyContacts": "Emergency Contacts",
-  "helpAndSupport": "Help & Support",
-  "termsOfService": "Terms of Service",
-  "privacyPolicy": "Privacy Policy",
-  "myAccount": "My Account",
-  "editProfile": "Edit Profile",
+  "cancel": "Cancel",
+  "logout_dialog_content": "Are you sure you want to logout?",
+  
+  "personal_info": "Personal Information",
+  "my_account": "My Account",
+  "edit_profile": "Edit Profile",
+
   "language": "Language",
+  "select_language": "Select Language",
   "english": "English",
-  "arabic": "Arabic"
+  "arabic": "Arabic",
+
+  "next": "Next"
 }

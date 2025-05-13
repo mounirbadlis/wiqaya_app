@@ -4,16 +4,24 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:hugeicons/hugeicons.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:wiqaya_app/controllers/auth_controller.dart';
+import 'package:wiqaya_app/controllers/children_controller.dart';
+import 'package:wiqaya_app/controllers/historical_record_controller.dart';
+import 'package:wiqaya_app/controllers/vaccine_controller.dart';
 import 'package:wiqaya_app/firebase_options.dart';
 import 'package:wiqaya_app/providers/locale_provider.dart';
 import 'package:wiqaya_app/views/auth/login_screen.dart';
 import 'package:wiqaya_app/views/auth/register_screen.dart';
-import 'package:wiqaya_app/views/home_screen.dart';
+import 'package:wiqaya_app/views/children/add_child_screen.dart';
+import 'package:wiqaya_app/views/children/child_history_screen.dart';
+import 'package:wiqaya_app/views/children/children_screen.dart';
+import 'package:wiqaya_app/views/children/required_ages_screen.dart';
+import 'package:wiqaya_app/views/main_screen.dart';
 import 'package:wiqaya_app/views/splash_screen.dart';
+import 'package:wiqaya_app/views/vaccine/vaccine_details_screen.dart';
+import 'package:wiqaya_app/views/vaccine/vaccines_screen.dart';
 import 'package:wiqaya_app/views/welcome_screen.dart';
 
 Future<void> main() async {
@@ -37,6 +45,9 @@ Future<void> main() async {
       providers: [
         ChangeNotifierProvider(create: (_) => LocaleProvider()),
         ChangeNotifierProvider(create: (_) => AuthController()),
+        ChangeNotifierProvider(create: (_) => ChildrenController()),
+        ChangeNotifierProvider(create: (_) => HistoricalRecordController()),
+        ChangeNotifierProvider(create: (_) => VaccineController()),
       ],
       child: ScreenUtilInit(
         designSize: const Size(375, 812),
@@ -87,13 +98,13 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final provider = Provider.of<LocaleProvider>(context);
+    final localeProvider = Provider.of<LocaleProvider>(context);
 
     return MaterialApp(
       debugShowCheckedModeBanner: false,
 
       //locale settings
-      locale: provider.locale,
+      locale: localeProvider.locale,
       supportedLocales: const [Locale('en'), Locale('ar')],
       localizationsDelegates: const [
         AppLocalizations.delegate,
@@ -115,14 +126,16 @@ class MyApp extends StatelessWidget {
       //theme settings
       theme: ThemeData(
         fontFamily:
-            provider.locale.languageCode == 'ar'
+            localeProvider.locale.languageCode == 'ar'
                 ? ArabicThemeData.font(arabicFont: ArabicFont.dinNextLTArabic)
                 : ArabicThemeData.font(arabicFont: ArabicFont.dinNextLTArabic),
         package: ArabicThemeData.package,
-        primaryColor: Color.fromRGBO(219, 235, 252, 1),
-        secondaryHeaderColor: Color.fromRGBO(27, 83, 213, 1),
-        canvasColor: Colors.white,
 
+        //colors
+        primaryColor: Color.fromRGBO(243,240,247,1),
+        secondaryHeaderColor: Color.fromRGBO(27, 83, 213, 1),
+
+        //text theme
         textTheme: TextTheme(
           headlineLarge: TextStyle(
             fontSize: 32.sp,
@@ -142,8 +155,22 @@ class MyApp extends StatelessWidget {
       //routes settings
       initialRoute: '/splash',
       routes: {
-        '/': (context) => const HomeScreen(),
+        '/main': (context) => MainScreen(),
+        
+        //children
+        '/children': (context) => const ChildrenScreen(),
+        '/children/child_history': (context) => ChildHistoryScreen(child: Provider.of<ChildrenController>(context, listen: false).selectedChild!,),
+        '/children/add': (context) => const AddChildScreen(),
+        '/children/add/next': (context) => const RequiredAgesScreen(),
+
+        //vaccines
+        '/vaccines': (context) => const VaccinesScreen(),
+        '/vaccines/vaccine_details': (context) => VaccineDetailsScreen(),
+
+        //splash
         '/splash': (context) => const SplashScreen(),
+
+        //auth
         '/welcome': (context) => const WelcomeScreen(),
         '/login': (context) => const LoginScreen(),
         '/register': (context) => const RegisterScreen(),
