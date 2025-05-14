@@ -103,6 +103,7 @@ class _AddChildScreenState extends State<AddChildScreen> {
         }
       },
       child: Scaffold(
+        backgroundColor: Theme.of(context).primaryColor,
         appBar: AppBar(
           backgroundColor: Theme.of(context).secondaryHeaderColor,
           leading: IconButton(
@@ -127,7 +128,8 @@ class _AddChildScreenState extends State<AddChildScreen> {
             ),
             child: Form(
               key: _formKey,
-              child: Column(
+              child: SingleChildScrollView(
+                child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   // First Name Field
@@ -255,7 +257,7 @@ class _AddChildScreenState extends State<AddChildScreen> {
             ),
           ),
         ),
-      ),
+      ),)
     );
   }
 

@@ -1,8 +1,10 @@
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:wiqaya_app/api/api_client.dart';
 import 'package:wiqaya_app/models/child.dart';
-
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import '../models/user.dart';
+import 'package:intl/intl.dart' as intl;
 
 class ChildrenController extends ChangeNotifier {
   final ApiClient _apiClient = ApiClient();
@@ -28,16 +30,28 @@ class ChildrenController extends ChangeNotifier {
     }
   }
 
-  Future<void> addChild() async {
+  Future<void> addChild(List<Map<String, dynamic>> takenVaccines, BuildContext context) async {
     try {
       isLoading = true;
-      hasError = false;
       notifyListeners();
-      final response = await _apiClient.post('/children', data: {'parent_id': User.user?.id, 'first_name': newChild?.firstName, 'family_name': newChild?.familyName, 'gender': newChild?.gender, 'birth_date': newChild?.birthDate, 'blood_type': newChild?.bloodType});
+      final response = await _apiClient.post('/children', data: {'parent_id': User.user?.id, 'first_name': newChild?.firstName, 'family_name': newChild?.familyName, 'birth_date': intl.DateFormat('yyyy-MM-dd').format(newChild!.birthDate), 'gender': newChild?.gender, 'blood_type': newChild?.bloodType, 'taken_vaccines': takenVaccines});
       newChild = Child.fromJson(response.data);
     } catch (e) {
-      print('addChild failed: $e');
-      hasError = true;
+      print('Error from server: ${e}');
+      if (e is DioException) {
+        final status = e.response?.statusCode;
+        if (status == 401) {
+          throw Exception(AppLocalizations.of(context)!.error_invalid_password);
+        } else if (status == 500) {
+          throw Exception(AppLocalizations.of(context)!.error_server);
+        } else {
+          throw Exception(
+            AppLocalizations.of(context)!.error_connection,
+          );
+        }
+      } else {
+        throw Exception(e.toString());
+      }
     } finally {
       isLoading = false;
       notifyListeners();

@@ -81,6 +81,10 @@
   "required_ages": "Required Ages",
 
   "add_child": "Add Child",
+  "next": "Next",
+  "select_vaccines": "Select vaccines that your child has already received:",
+  "no_vaccines_for_age": "No vaccines are required for your child's age yet.",
+  "add": "Add",
 
   "logout": "Logout",
   "cancel": "Cancel",
@@ -93,7 +97,6 @@
   "language": "Language",
   "select_language": "Select Language",
   "english": "English",
-  "arabic": "Arabic",
+  "arabic": "Arabic"
 
-  "next": "Next"
 }

@@ -14,11 +14,10 @@ class RequiredAgesScreen extends StatefulWidget {
 }
 
 class _RequiredAgesScreenState extends State<RequiredAgesScreen> {
-  // Map to store vaccine status (checked/unchecked)
+  late AppLocalizations loc;
   final Map<String, bool> _vaccineStatus = {};
-  
-  // List of available vaccines with their required ages in months
   late final List<Map<String, dynamic>> _vaccines;
+  bool _isLoading = false;
 
   @override
   void initState() {
@@ -38,15 +37,15 @@ class _RequiredAgesScreenState extends State<RequiredAgesScreen> {
     
     // Define vaccines with their required ages
     _vaccines = [
-      {'name': 'BCG', 'required_age': 0, 'description': 'Tuberculosis vaccine'},
-      {'name': 'DTC-HIB-HBV 1', 'required_age': 2, 'description': 'Diphtheria, Tetanus, Pertussis, Hib, Hepatitis B (1st dose)'},
-      {'name': 'VPO 1', 'required_age': 2, 'description': 'Oral Polio Vaccine (1st dose)'},
-      {'name': 'DTC-HIB-HBV 2', 'required_age': 4, 'description': 'Diphtheria, Tetanus, Pertussis, Hib, Hepatitis B (2nd dose)'},
-      {'name': 'VPO 2', 'required_age': 4, 'description': 'Oral Polio Vaccine (2nd dose)'},
-      {'name': 'ROR 1', 'required_age': 11, 'description': 'Measles, Mumps, Rubella (1st dose)'},
-      {'name': 'DTC-HIB-HBV 3', 'required_age': 12, 'description': 'Diphtheria, Tetanus, Pertussis, Hib, Hepatitis B (3rd dose)'},
-      {'name': 'VPO 3', 'required_age': 12, 'description': 'Oral Polio Vaccine (3rd dose)'},
-      {'name': 'ROR 2', 'required_age': 12, 'description': 'Measles, Mumps, Rubella (2nd dose)'},
+      {'name': 'BCG', 'required_age': 0, 'vaccine': 'BCG', 'description': 'Tuberculosis vaccine'},
+      {'name': 'DTC-HIB-HBV 1', 'required_age': 2, 'vaccine': 'DTC-HIB-HBV', 'description': 'Diphtheria, Tetanus, Pertussis, Hib, Hepatitis B (1st dose)'},
+      {'name': 'VPO 1', 'required_age': 2, 'vaccine': 'VPO', 'description': 'Oral Polio Vaccine (1st dose)'},
+      {'name': 'DTC-HIB-HBV 2', 'required_age': 4, 'vaccine': 'DTC-HIB-HBV', 'description': 'Diphtheria, Tetanus, Pertussis, Hib, Hepatitis B (2nd dose)'},
+      {'name': 'VPO 2', 'required_age': 4, 'vaccine': 'VPO', 'description': 'Oral Polio Vaccine (2nd dose)'},
+      {'name': 'ROR 1', 'required_age': 11, 'vaccine': 'ROR', 'description': 'Measles, Mumps, Rubella (1st dose)'},
+      {'name': 'DTC-HIB-HBV 3', 'required_age': 12, 'vaccine': 'DTC-HIB-HBV', 'description': 'Diphtheria, Tetanus, Pertussis, Hib, Hepatitis B (3rd dose)'},
+      {'name': 'VPO 3', 'required_age': 12, 'vaccine': 'VPO', 'description': 'Oral Polio Vaccine (3rd dose)'},
+      {'name': 'ROR 2', 'required_age': 12, 'vaccine': 'ROR', 'description': 'Measles, Mumps, Rubella (2nd dose)'},
     ];
     
     // Filter vaccines based on child's age
@@ -56,11 +55,12 @@ class _RequiredAgesScreenState extends State<RequiredAgesScreen> {
     for (var vaccine in _vaccines) {
       _vaccineStatus[vaccine['name']] = false;
     }
+    print(_vaccineStatus);
   }
 
   @override
   Widget build(BuildContext context) {
-    final loc = AppLocalizations.of(context)!;
+    loc = AppLocalizations.of(context)!;
     
     return PopScope(
       canPop: false,
@@ -79,7 +79,7 @@ class _RequiredAgesScreenState extends State<RequiredAgesScreen> {
             },
           ),
           title: Text(
-            /*loc.vaccine_history ?? */'Vaccine History',
+            loc.record ?? 'Vaccine History',
             style: Theme.of(context).textTheme.headlineMedium!.copyWith(color: Colors.white)
           ),
         ),
@@ -96,7 +96,7 @@ class _RequiredAgesScreenState extends State<RequiredAgesScreen> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  /*loc.select_vaccines ?? */'Select vaccines that your child has already received:',
+                  loc.select_vaccines,
                   style: Theme.of(context).textTheme.titleMedium,
                 ),
                 SizedBox(height: 20.h),
@@ -105,7 +105,7 @@ class _RequiredAgesScreenState extends State<RequiredAgesScreen> {
                   child: _vaccines.isEmpty
                       ? Center(
                           child: Text(
-                            /*loc.no_vaccines_for_age ?? */'No vaccines are required for your child\'s age yet.',
+                            loc.no_vaccines_for_age,
                             textAlign: TextAlign.center,
                           ),
                         )
@@ -123,13 +123,18 @@ class _RequiredAgesScreenState extends State<RequiredAgesScreen> {
                 SizedBox(
                   width: double.infinity,
                   child: ElevatedButton(
-                    onPressed: _saveVaccineData,
+                    onPressed: _isLoading ? null : _saveVaccineData,
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Theme.of(context).secondaryHeaderColor,
                       padding: EdgeInsets.symmetric(vertical: 14.h),
                     ),
-                    child: Text(
-                      /*loc.add ?? */'Add',
+                    child: _isLoading
+                        ? CircularProgressIndicator(
+                          color: Colors.white,
+                          strokeWidth: 1.sp,
+                        )
+                        : Text(
+                      loc.add,
                       style: TextStyle(
                         fontSize: 16.sp,
                         color: Colors.white,
@@ -146,6 +151,13 @@ class _RequiredAgesScreenState extends State<RequiredAgesScreen> {
   }
 
   Widget _buildVaccineCheckbox(Map<String, dynamic> vaccine) {
+    String _setVaccineAge(Map<String, dynamic> vaccine) {
+      if(vaccine['required_age'] == 0){
+        return loc.birth;
+      }else{
+        return '${vaccine['required_age']} ${loc.months}';
+      }
+    }
     return Card(
       elevation: 2,
       margin: EdgeInsets.symmetric(vertical: 8.h),
@@ -160,23 +172,12 @@ class _RequiredAgesScreenState extends State<RequiredAgesScreen> {
             fontSize: 16.sp,
           ),
         ),
-        subtitle: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(vaccine['description']),
-            Text(
-              '${/*AppLocalizations.of(context)?.recommended_age ?? */'Recommended age'}: ${vaccine['required_age']} ${/*AppLocalizations.of(context)?.months ?? */'months'}',
-              style: TextStyle(
-                fontStyle: FontStyle.italic,
-                fontSize: 12.sp,
-              ),
-            ),
-          ],
-        ),
-        value: _vaccineStatus[vaccine['name']],
+        subtitle: Text(_setVaccineAge(vaccine)),
+        value: _vaccineStatus[vaccine['name']] ?? false,
         onChanged: (bool? value) {
           setState(() {
             _vaccineStatus[vaccine['name']] = value ?? false;
+            print(_vaccineStatus);
           });
         },
         contentPadding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 8.h),
@@ -186,25 +187,43 @@ class _RequiredAgesScreenState extends State<RequiredAgesScreen> {
       ),
     );
   }
+  Future<void> _saveVaccineData() async {
+  final childrenController = Provider.of<ChildrenController>(context, listen: false);
 
-  void _saveVaccineData() {
-    // Get child from controller
-    final childrenController = Provider.of<ChildrenController>(context, listen: false);
-    final Child child = childrenController.newChild!;
-    
-    // Here you would typically save the vaccine data to the child object
-    // For example, if Child model has a vaccineHistory field:
-    // child.vaccineHistory = _vaccineStatus;
-    
-    // For now, we'll just print the selected vaccines for demonstration
-    print('Selected vaccines for ${child.firstName}:');
-    _vaccineStatus.forEach((vaccine, isSelected) {
-      if (isSelected) {
-        print('- $vaccine');
+  final List<Map<String, dynamic>> selectedVaccines = [];
+
+  _vaccineStatus.forEach((doseName, isChecked) {
+    if (isChecked) {
+      final matchedVaccine = _vaccines.firstWhere(
+        (v) => v['name'] == doseName,
+        orElse: () => {},
+      );
+
+      if (matchedVaccine.isNotEmpty) {
+        selectedVaccines.add({
+          'name': matchedVaccine['vaccine'],
+          'value': true,
+        });
       }
-    });
-    
-    // Return to the main screen or navigate to the next page
-    Navigator.pushNamed(context, '/main', arguments: MainScreen(selectedIndex: 2));
+    }
+  });
+  try {
+    setState(() => _isLoading = true);
+    await childrenController.addChild(selectedVaccines, context);
+    Navigator.pop(context);
+  } catch (e) {
+    _showSnackBar(e.toString().replaceFirst('Exception: ', ''));
+  } finally {
+    if (mounted) {
+      setState(() => _isLoading = false);
+    }
   }
+}
+
+void _showSnackBar(String message) {
+  if (!mounted) return;
+  ScaffoldMessenger.of(context).showSnackBar(
+    SnackBar(content: Text(message)),
+  );
+}
 }

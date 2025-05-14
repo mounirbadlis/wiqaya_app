@@ -26,6 +26,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
   int? _selectedGender;
   String? _selectedBloodType;
   bool _obscurePassword = true;
+  bool _isLoading = false;
 
   final List<String> _bloodTypes = [
     'A+', 'A-', 'B+', 'B-', 'AB+', 'AB-', 'O+', 'O-'
@@ -274,12 +275,17 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   SizedBox(
                     width: double.infinity,
                     child: ElevatedButton(
-                      onPressed: _submit,
+                      onPressed: _isLoading ? null : _submit,
                       style: ElevatedButton.styleFrom(
                         backgroundColor: Theme.of(context).secondaryHeaderColor,
                         padding: EdgeInsets.symmetric(vertical: 14.h),
                       ),
-                      child: Text(
+                      child: _isLoading
+                          ? CircularProgressIndicator(
+                            color: Colors.white,
+                            strokeWidth: 1.sp,
+                          )
+                          : Text(
                         loc.register,
                         style: TextStyle(fontSize: 16.sp, color: Colors.white),
                       ),
@@ -392,6 +398,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
       );
 
       try {
+        setState(() {
+          _isLoading = true;
+        });
         await Provider.of<AuthController>(context, listen: false).register(
           email: email,
           password: password,
@@ -414,6 +423,12 @@ class _RegisterScreenState extends State<RegisterScreen> {
         if (mounted) {
           Navigator.of(context).pop(); // close loader
           _showSnackBar(e.toString().replaceFirst('Exception: ', ''));
+        }
+      } finally {
+        if (mounted) {
+          setState(() {
+            _isLoading = false;
+          });
         }
       }
     }
