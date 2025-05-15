@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
 import 'package:wiqaya_app/controllers/historical_record_controller.dart';
-import 'package:wiqaya_app/models/user.dart';
 import 'package:wiqaya_app/widgets/historical_record/historical_record_widget.dart';
+import 'package:wiqaya_app/widgets/shared/custom_circular_indicator.dart';
 import 'package:wiqaya_app/widgets/shared/error_retry_widget.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
@@ -54,7 +54,7 @@ class _HistoricalRecordsState extends State<HistoricalRecords> {
           child: Consumer<HistoricalRecordController>(
             builder: (context, controller, _) {
               if (controller.isLoading) {
-                return const Center(child: CircularProgressIndicator());
+                return const Center(child: CustomCircularIndicator());
               } else if (controller.hasError) {
                 return ErrorRetryWidget(
                   message: AppLocalizations.of(context)!.error_server,
@@ -64,7 +64,14 @@ class _HistoricalRecordsState extends State<HistoricalRecords> {
                   },
                 );
               } else if (controller.historicalRecords.isEmpty) {
-                return const Center(child: Text('No records found'));
+                return Center(
+                  child: Text(
+                    AppLocalizations.of(context)!.no_data,
+                    style: const TextStyle(
+                      color: Colors.black,
+                    ),
+                  ),
+                );
               } else {
                 return ListView.builder(
                   itemCount: controller.historicalRecords.length,

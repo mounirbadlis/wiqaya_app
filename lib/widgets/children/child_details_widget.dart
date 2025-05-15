@@ -58,7 +58,7 @@ class ChildDetailsWidget extends StatelessWidget {
                 color: child.gender == 1 ? Colors.blue : Colors.pink,
               ),
               title: Text(
-                child.gender == 1 ? 'Male' : 'Female',
+                child.gender == 1 ? AppLocalizations.of(context)!.male : AppLocalizations.of(context)!.female,
                 style: Theme.of(context).textTheme.headlineSmall,
               ),
             ),

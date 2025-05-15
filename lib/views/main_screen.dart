@@ -3,6 +3,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:hugeicons/hugeicons.dart';
 import 'package:iconsax_flutter/iconsax_flutter.dart';
 import 'package:wiqaya_app/models/user.dart';
+import 'package:wiqaya_app/views/appointment/appointments_screen.dart';
 import 'package:wiqaya_app/views/children/children_screen.dart';
 import 'package:wiqaya_app/views/histrical_record/histrical_records.dart';
 import 'package:wiqaya_app/widgets/drawer/drawer.dart';
@@ -19,7 +20,7 @@ class _MainScreenState extends State<MainScreen> {
 
   final List<Widget> _pages = [
     Center(child: Text('Home Page')),
-    Center(child: Text('Appointments Page')),
+    const AppointmentsScreen(),
     const ChildrenScreen(),
     HistoricalRecords(id: User.user!.id),
   ];

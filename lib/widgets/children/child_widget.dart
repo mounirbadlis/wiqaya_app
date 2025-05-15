@@ -44,7 +44,7 @@ class ChildWidget extends StatelessWidget {
                 ),
                 SizedBox(height: 4.h),
                 Text(
-                  '${DateTime.now().year - child.birthDate.year} years old',
+                  '${DateTime.now().year - child.birthDate.year} ${AppLocalizations.of(context)!.years_old}',
                   style: Theme.of(context).textTheme.bodyLarge!.copyWith(color: Colors.grey[600]),
                 ),
               ],

@@ -79,6 +79,8 @@
   "vaccine": "لقاح",
   "required_ages": "العمر المطلوب",
 
+  "year_old": "سنة",
+  "years_old": "سنوات",
   "add_child": "إضافة إبن",
   "next": "التالي",
   "select_vaccines": "اختر اللقاحات التي تم استلامها",
@@ -96,6 +98,20 @@
   "language": "اللغة",
   "select_language": "اختر اللغة",
   "english": "الإنجليزية",
-  "arabic": "العربية"
+  "arabic": "العربية",
 
+  "unknown": "غير معروف",
+  "no_data": "لم يتم العثور على بيانات",
+
+  "record_details": "تفاصيل السجل",
+  "center": "مركز التطعيم",
+  "date": "التاريخ",
+  "provider_name": "المقدم",
+
+  "pending": "قيد الانتظار",
+  "confirmed": "تم التأكيد",
+  "completed": "تم الانتهاء",
+  "cancelled": "تم الالغاء",
+  "for_child": "ل",
+  "for_me": "لي"
 }

@@ -80,6 +80,8 @@
   "vaccine": "Vaccine",
   "required_ages": "Required Ages",
 
+  "year_old": "year old",
+  "years_old": "years old",
   "add_child": "Add Child",
   "next": "Next",
   "select_vaccines": "Select vaccines that your child has already received:",
@@ -97,6 +99,20 @@
   "language": "Language",
   "select_language": "Select Language",
   "english": "English",
-  "arabic": "Arabic"
+  "arabic": "Arabic",
 
+  "unknown": "Unknown",
+  "no_data": "No Data Found",
+
+  "record_details": "Record Details",
+  "center": "Center",
+  "date": "Date",
+  "provider_name": "Provider",
+
+  "pending": "Pending",
+  "confirmed": "Confirmed",
+  "completed": "Completed",
+  "cancelled": "Cancelled",
+  "for_child": "For",
+  "for_me": "For me"
 }

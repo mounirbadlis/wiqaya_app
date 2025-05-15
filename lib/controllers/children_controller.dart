@@ -19,7 +19,7 @@ class ChildrenController extends ChangeNotifier {
       isLoading = true;
       hasError = false;
       notifyListeners();
-      final response = await _apiClient.get('/children', data: {'parent_id': User.user?.id});
+      final response = await _apiClient.get('/children/${User.user?.id}');
       children = Child.childrenFromJson(response.data);
     } catch (e) {
       print('getChildren failed: $e');

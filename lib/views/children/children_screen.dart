@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import 'package:wiqaya_app/controllers/children_controller.dart';
 import 'package:wiqaya_app/widgets/children/child_widget.dart';
 import 'package:wiqaya_app/widgets/shared/add_button.dart';
+import 'package:wiqaya_app/widgets/shared/custom_circular_indicator.dart';
 import 'package:wiqaya_app/widgets/shared/error_retry_widget.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
@@ -55,7 +56,7 @@ class _ChildrenScreenState extends State<ChildrenScreen> {
                 child: Consumer<ChildrenController>(
                   builder: (context, controller, _) {
                     if (controller.isLoading) {
-                      return const Center(child: CircularProgressIndicator());
+                      return const Center(child: CustomCircularIndicator());
                     } else if (controller.hasError) {
                       return ErrorRetryWidget(
                         message: AppLocalizations.of(context)!.error_server,
@@ -68,7 +69,14 @@ class _ChildrenScreenState extends State<ChildrenScreen> {
                         },
                       );
                     } else if (controller.children.isEmpty) {
-                      return const Center(child: Text('No children found'));
+                      return Center(
+                        child: Text(
+                          AppLocalizations.of(context)!.no_data,
+                          style: const TextStyle(
+                            color: Colors.black,
+                          ),
+                        ),
+                      );
                     } else {
                       return ListView.builder(
                         itemCount: controller.children.length,
