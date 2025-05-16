@@ -27,6 +27,7 @@ import 'package:wiqaya_app/views/vaccine/vaccine_details_screen.dart';
 import 'package:wiqaya_app/views/vaccine/vaccines_screen.dart';
 import 'package:wiqaya_app/views/welcome_screen.dart';
 import 'package:mapbox_maps_flutter/mapbox_maps_flutter.dart';
+import 'package:geolocator/geolocator.dart' as geolocator;
 
 Future<void> main() async {
   // Initialize the app and Firebase
@@ -44,6 +45,7 @@ Future<void> main() async {
   //   sound: true,
   // );
   await setupFCM();
+  await requestMapPermission();
   MapboxOptions.setAccessToken('pk.eyJ1IjoibW91bmlyYmFkbGlzMiIsImEiOiJjbTl6emg5YjgwaGRyMmxzZng1cTkxa256In0.FCAWFO7Iqz5t4u2dGqSDwA');
   runApp(
     MultiProvider(
@@ -98,6 +100,16 @@ Future<void> setupFCM() async {
     }
   });
 }
+
+  Future<void> requestMapPermission() async {
+    geolocator.LocationPermission permission = await geolocator.Geolocator.checkPermission();
+    if(permission == geolocator.LocationPermission.denied){
+      permission = await geolocator.Geolocator.requestPermission();
+      if(permission == geolocator.LocationPermission.deniedForever){
+        return;
+      }
+    }
+  }
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});

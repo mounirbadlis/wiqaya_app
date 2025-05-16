@@ -113,5 +113,7 @@
   "completed": "تم الانتهاء",
   "cancelled": "تم الالغاء",
   "for_child": "ل",
-  "for_me": "لي"
+  "for_me": "لي",
+
+  "appointment_details": "تفاصيل الموعد"
 }

@@ -114,5 +114,7 @@
   "completed": "Completed",
   "cancelled": "Cancelled",
   "for_child": "For",
-  "for_me": "For me"
+  "for_me": "For me",
+
+  "appointment_details": "Appointment Details"
 }
