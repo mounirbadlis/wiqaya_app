@@ -78,6 +78,7 @@ flutter:
     - assets/logo/wiqaya_app_logo.png
     - assets/logo/wiqaya_app_logo_white.png
     - assets/icons/hospital_location_icon.png
+    - assets/icons/user_position_icon.png
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/to/resolution-aware-images

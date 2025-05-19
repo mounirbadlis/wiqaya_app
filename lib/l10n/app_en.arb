@@ -116,5 +116,19 @@
   "for_child": "For",
   "for_me": "For me",
 
-  "appointment_details": "Appointment Details"
+  "appointment_details": "Appointment Details",
+  "distance": "Distance",
+  "km": "km",
+  "m": "m",
+  "calculating": "Calculating...",
+  "working_hours": "Working Hours",
+  "to": "to",
+  "book_appointment": "Book Appointment",
+  "pick_instructions": "You can pick a position manually by long-pressing on the map.",
+  "concerned": "The Concerned",
+  "child": "Child",
+  "select_vaccine": "Select Vaccine",
+  "available_dates": "Available Dates",
+  "select_date": "Select Date",
+  "available_centers": "Available Centers"
 }

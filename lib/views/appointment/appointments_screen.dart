@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import 'package:wiqaya_app/controllers/appointment_controller.dart';
 import 'package:wiqaya_app/models/user.dart';
 import 'package:wiqaya_app/widgets/appointment/appointment_widget.dart';
+import 'package:wiqaya_app/widgets/shared/add_button.dart';
 import 'package:wiqaya_app/widgets/shared/custom_circular_indicator.dart';
 import 'package:wiqaya_app/widgets/shared/error_retry_widget.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -41,52 +42,69 @@ class _AppointmentsScreenState extends State<AppointmentsScreen> {
         await controller.getAppointments(User.user!.id);
       },
       child: Scaffold(
-        body: Container(
-          color: Theme.of(context).secondaryHeaderColor,
-          padding: EdgeInsets.only(top: 10.w),
-          child: Container(
-            padding: EdgeInsets.all(10.w),
-            decoration: BoxDecoration(
-              color: Theme.of(context).primaryColor,
-              //borderRadius: BorderRadius.circular(20),
-              borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
-            ),
-            child: Consumer<AppointmentController>(
-              builder: (context, controller, _) {
-                if (controller.isLoading) {
-                  return const Center(child: CustomCircularIndicator());
-                } else if (controller.hasError) {
-                  return ErrorRetryWidget(
-                    message: AppLocalizations.of(context)!.error_server,
-                    onRetry: () {
-                      final controller = Provider.of<AppointmentController>(
-                        context,
-                        listen: false,
+        body: Stack(
+          children: [
+            Container(
+              color: Theme.of(context).secondaryHeaderColor,
+              padding: EdgeInsets.only(top: 10.w),
+              child: Container(
+                padding: EdgeInsets.all(10.w),
+                decoration: BoxDecoration(
+                  color: Theme.of(context).primaryColor,
+                  //borderRadius: BorderRadius.circular(20),
+                  borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+                ),
+                child: Consumer<AppointmentController>(
+                  builder: (context, controller, _) {
+                    if (controller.isLoading) {
+                      return const Center(child: CustomCircularIndicator());
+                    } else if (controller.hasError) {
+                      return ErrorRetryWidget(
+                        message: AppLocalizations.of(context)!.error_server,
+                        onRetry: () {
+                          final controller = Provider.of<AppointmentController>(
+                            context,
+                            listen: false,
+                          );
+                          controller.getAppointments(User.user!.id);
+                        },
                       );
-                      controller.getAppointments(User.user!.id);
-                    },
-                  );
-                } else if (controller.appointments.isEmpty) {
-                  return Center(
-                    child: Text(
-                      AppLocalizations.of(context)!.no_data,
-                      style: const TextStyle(
-                        color: Colors.black,
-                      ),
-                    ),
-                  );
-                } else {
-                  return ListView.builder(
-                    itemCount: controller.appointments.length,
-                    itemBuilder: (context, index) {
-                      final appointment = controller.appointments[index];
-                      return AppointmentWidget(appointment: appointment);
-                    },
-                  );
-                }
-              },
+                    } else if (controller.appointments.isEmpty) {
+                      return Center(
+                        child: Text(
+                          AppLocalizations.of(context)!.no_data,
+                          style: const TextStyle(
+                            color: Colors.black,
+                          ),
+                        ),
+                      );
+                    } else {
+                      return ListView.builder(
+                        itemCount: controller.appointments.length,
+                        itemBuilder: (context, index) {
+                          final appointment = controller.appointments[index];
+                          return AppointmentWidget(appointment: appointment);
+                        },
+                      );
+                    }
+                  },
+                ),
+              ),
             ),
-          ),
+            Positioned(
+              bottom: 20.h,
+              left: 0,
+              right: 0,
+              child: Center(
+                child: AddButton(
+                  title: AppLocalizations.of(context)!.book_appointment,
+                  onTap: () {
+                    Navigator.pushNamed(context, '/appointments/book');
+                  },
+                ),
+              ),
+            ),
+          ],
         ),
       ),
     );

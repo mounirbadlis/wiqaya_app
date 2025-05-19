@@ -15,6 +15,7 @@ import 'package:wiqaya_app/firebase_options.dart';
 import 'package:wiqaya_app/providers/locale_provider.dart';
 import 'package:wiqaya_app/views/appointment/appointment_details_screen.dart';
 import 'package:wiqaya_app/views/appointment/appointments_screen.dart';
+import 'package:wiqaya_app/views/appointment/book_appointment_screen.dart';
 import 'package:wiqaya_app/views/auth/login_screen.dart';
 import 'package:wiqaya_app/views/auth/register_screen.dart';
 import 'package:wiqaya_app/views/children/add_child_screen.dart';
@@ -188,6 +189,7 @@ class MyApp extends StatelessWidget {
         //appointments
         '/appointments': (context) => const AppointmentsScreen(),
         '/appointments/details': (context) => AppointmentDetailsScreen(),
+        '/appointments/book': (context) => const BookAppointmentScreen(),
 
         //splash
         '/splash': (context) => const SplashScreen(),

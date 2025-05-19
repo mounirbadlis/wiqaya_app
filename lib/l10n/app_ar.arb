@@ -76,7 +76,7 @@
   "birth": "عند الولادة",
   "month": "شهر",
   "months": "شهور",
-  "vaccine": "لقاح",
+  "vaccine": "اللقاح",
   "required_ages": "العمر المطلوب",
 
   "year_old": "سنة",
@@ -115,5 +115,19 @@
   "for_child": "ل",
   "for_me": "لي",
 
-  "appointment_details": "تفاصيل الموعد"
+  "appointment_details": "تفاصيل الموعد",
+  "distance": "المسافة",
+  "km": "كم",
+  "m": "متر",
+  "calculating": "جار الحساب ...",
+  "working_hours": "ساعات العمل",
+  "to": "إلى",
+  "book_appointment": "حجز موعد",
+  "pick_instructions": "يمكنك اختيار موقعك يدوياً عن طريق الضغط المطول على الخريطة.",
+  "concerned": "المعني باللقاح",
+  "child": "الإبن",
+  "select_vaccine": "اختر اللقاح",
+  "available_dates": "التواريخ المتاحة",
+  "select_date": "اختر التاريخ",
+  "available_centers": "المراكز المتاحة"
 }

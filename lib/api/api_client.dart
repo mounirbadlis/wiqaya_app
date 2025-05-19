@@ -23,7 +23,7 @@ class ApiClient {
           return handler.next(options);
         },
         onError: (DioException error, handler) async {
-          // if (error.response?.statusCode == 401 || error.response?.statusCode == 403) {
+          if (error.response?.statusCode == 401 || error.response?.statusCode == 403) {
             // Token might be expired
             print('error refresh token: ${error.response?.data}');
             final refreshToken = await _secureStorage.read('refresh_token');
@@ -53,6 +53,7 @@ class ApiClient {
             }
           // }
           return handler.next(error);
+        }
         },
       ),
     );

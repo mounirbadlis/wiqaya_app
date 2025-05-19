@@ -1,5 +1,5 @@
 
-import 'package:wiqaya_app/models/center.dart';
+import 'package:wiqaya_app/models/vaccination_center.dart';
 import 'package:wiqaya_app/models/schedule.dart';
 import 'package:wiqaya_app/models/vaccine.dart';
 
@@ -11,7 +11,7 @@ class Appointment {
   String? firstName;
   String? familyName;
   Schedule? schedule;
-  Center? center;
+  VaccinationCenter? center;
   Vaccine? vaccine;
 
   Appointment({
@@ -41,7 +41,7 @@ factory Appointment.fromJson(Map<String, dynamic> json) {
     firstName: individuals != null ? individuals['first_name'] : null,
     familyName: individuals != null ? individuals['family_name'] : null,
     schedule: schedules != null ? Schedule.fromJson(schedules) : null,
-    center: centers != null ? Center.fromJson(centers) : null,
+    center: centers != null ? VaccinationCenter.fromJson(centers) : null,
     vaccine: vaccines != null ? Vaccine.fromJson(vaccines) : null,
   );
 }
