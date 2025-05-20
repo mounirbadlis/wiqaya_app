@@ -129,5 +129,13 @@
   "select_vaccine": "اختر اللقاح",
   "available_dates": "التواريخ المتاحة",
   "select_date": "اختر التاريخ",
-  "available_centers": "المراكز المتاحة"
+  "available_centers": "المراكز المتاحة",
+  "nearest": "الأقرب",
+  "change": "تغيير",
+  "change_center": "تغيير المركز",
+  "select_center": "اختر المركز",
+  "ok": "حسناً",
+  "book": "حجز",
+  "no_available_slots": "لا يوجد جرعات متاحة",
+  "appointment_booked_successfully": "تم حجز الموعد بنجاح"
 }

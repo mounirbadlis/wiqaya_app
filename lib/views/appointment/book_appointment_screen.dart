@@ -25,7 +25,7 @@ class BookAppointmentScreen extends StatefulWidget {
   State<BookAppointmentScreen> createState() => _BookAppointmentScreenState();
 }
 
-enum UserType {parent, child}
+enum UserType { parent, child }
 
 class _BookAppointmentScreenState extends State<BookAppointmentScreen> {
   String _selectedUserType = 'parent';
@@ -33,7 +33,8 @@ class _BookAppointmentScreenState extends State<BookAppointmentScreen> {
   Vaccine? _selectedVaccine;
   VaccinationCenter? _selectedCenter;
   DateTime? _selectedDate;
-  String? _concernedId;
+  String _concernedId = User.user!.id;
+  bool _isLoading = false;
 
   List<Map<String, double>> _routePoints = [];
   Point _selectedPoint = Point(coordinates: Position(10.6328, 36.8902));
@@ -75,17 +76,13 @@ class _BookAppointmentScreenState extends State<BookAppointmentScreen> {
             icon: const Icon(Icons.arrow_back, color: Colors.white),
             onPressed: () => Navigator.pop(context),
           ),
-          title: Text(
-            AppLocalizations.of(context)!.book_appointment,
-            style: Theme.of(
-              context,
-            ).textTheme.headlineMedium!.copyWith(color: Colors.white),
-          ),
+          title: Text(AppLocalizations.of(context)!.book_appointment, style: Theme.of(context).textTheme.headlineMedium!.copyWith(color: Colors.white),),
         ),
         body: Container(
           color: Theme.of(context).secondaryHeaderColor,
           padding: EdgeInsets.only(top: 10.w),
           child: Container(
+            height: double.infinity,
             padding: EdgeInsets.all(5.w),
             decoration: BoxDecoration(
               color: Theme.of(context).primaryColor,
@@ -100,181 +97,161 @@ class _BookAppointmentScreenState extends State<BookAppointmentScreen> {
                   ClipRRect(
                     borderRadius: const BorderRadius.vertical(
                       top: Radius.circular(20),
-                  ),
-                  child: SizedBox(
-                    height: 200.h,
-                    child: MapWidget(
-                      styleUri: MapboxStyles.MAPBOX_STREETS,
-                      cameraOptions: initialCamera,
-                      onMapCreated: (controller) {
-                        _mapController = controller;
-                        _setInitialLocation();
-                      },
-                      onLongTapListener: _onMapTap,
+                    ),
+                    child: SizedBox(
+                      height: 200.h,
+                      child: MapWidget(
+                        styleUri: MapboxStyles.MAPBOX_STREETS,
+                        cameraOptions: initialCamera,
+                        onMapCreated: (controller) {
+                          _mapController = controller;
+                          _setInitialLocation();
+                        },
+                        onLongTapListener: _onMapTap,
+                      ),
                     ),
                   ),
-                ),
-                Text(
-                  AppLocalizations.of(context)!.pick_instructions,
-                  style: Theme.of(
-                    context,
-                  ).textTheme.bodySmall!.copyWith(color: Colors.grey),
-                ),
-                Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 5.w),
-                  child: Consumer3<
-                    AppointmentController,
-                    VaccineController,
-                    ChildrenController
-                  >(
-                    builder: (
-                      context,
-                      appointmentController,
-                      vaccineController,
-                      childrenController,
-                      _,
-                    ) {
-                      if (vaccineController.isLoading ||
-                          childrenController.isLoading) {
-                        return Center(child: CustomCircularIndicator());
-                      } else if (vaccineController.hasError ||
-                          childrenController.hasError) {
-                        return ErrorRetryWidget(
-                          message: AppLocalizations.of(context)!.error_server,
-                          onRetry: () {
-                            vaccineController.getVaccines();
-                          },
-                        );
-                      } else {
-                        return Column(
-                          children: [
-                            _buildLabel(AppLocalizations.of(context)!.concerned),
-                            Row(
+                  Text(AppLocalizations.of(context)!.pick_instructions,
+                    style: Theme.of(context).textTheme.bodySmall!.copyWith(color: Colors.grey),
+                  ),
+                  SingleChildScrollView(
+                    child: Container(
+                      padding: EdgeInsets.symmetric(horizontal: 5.w),
+                      child: Consumer3<AppointmentController,VaccineController,ChildrenController>(
+                        builder: (context, appointmentController, vaccineController, childrenController, _) {
+                          if (vaccineController.isLoading ||
+                              childrenController.isLoading) {
+                            return Center(child: CustomCircularIndicator());
+                          } else if (vaccineController.hasError ||
+                              childrenController.hasError) {
+                            return ErrorRetryWidget(
+                              message: AppLocalizations.of(context)!.error_server,
+                              onRetry: () {
+                                childrenController.getChildren();
+                                vaccineController.getVaccines();
+                              },
+                            );
+                          } else {
+                            return Column(
                               children: [
-                                Expanded(
-                                  child: RadioListTile<String>(
-                                    title: Text(AppLocalizations.of(context)!.for_me),
-                                    value: 'parent',
-                                    groupValue: _selectedUserType,
-                                    onChanged: (value) {
-                                      setState(() {
-                                        _selectedUserType = value!;
-                                        _concernedId = User.user?.id;
-                                      });
-                                    },
-                                  ),
-                                ),
-                                Expanded(
-                                  child: RadioListTile<String>(
-                                    title: Text(
-                                      AppLocalizations.of(context)!.my_children,
+                                _buildLabel(AppLocalizations.of(context)!.concerned),
+                                Row(
+                                  children: [
+                                    Expanded(
+                                      child: RadioListTile<String>(
+                                        title: Text(AppLocalizations.of(context)!.for_me),
+                                        value: 'parent',
+                                        groupValue: _selectedUserType,
+                                        onChanged: (value) {
+                                          setState(() {
+                                            _selectedUserType = value!;
+                                            _concernedId = User.user!.id;
+                                          });
+                                        },
+                                      ),
                                     ),
-                                    value: 'child',
-                                    groupValue: _selectedUserType,
+                                    Expanded(
+                                      child: RadioListTile<String>(
+                                        title: Text(AppLocalizations.of(context)!.my_children),
+                                        value: 'child',
+                                        groupValue: _selectedUserType,
+                                        onChanged: (value) {
+                                          setState(() {
+                                            _selectedUserType = value!;
+                                            _concernedId = childrenController.children.first.id;
+                                          });
+                                        },
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                                if (_selectedUserType == 'child')
+                                  _buildLabel(AppLocalizations.of(context)!.child),
+                                if (_selectedUserType == 'child')
+                                  DropdownButtonFormField<String?>(
+                                    value: _concernedId,
+                                    decoration: InputDecoration(
+                                      border: OutlineInputBorder(
+                                        borderRadius: BorderRadius.circular(30.r),
+                                      ),
+                                      contentPadding: EdgeInsets.symmetric(
+                                        vertical: 14.h,
+                                        horizontal: 12.w,
+                                      ),
+                                    ),
                                     onChanged: (value) {
                                       setState(() {
-                                        _selectedUserType = value!;
-                                        _concernedId = childrenController.children.first.id;
+                                        _concernedId = value!;
                                       });
                                     },
+                                    items:
+                                        childrenController.children.map((child) {
+                                          return DropdownMenuItem(
+                                            value: child.id,
+                                            child: Text(
+                                              '${child.firstName} ${child.familyName}',
+                                            ),
+                                          );
+                                        }).toList(),
+                                  ),
+                                _buildLabel(AppLocalizations.of(context)!.vaccine),
+                                DropdownButtonFormField<Vaccine?>(
+                                  value: _selectedVaccine,
+                                  decoration: InputDecoration(
+                                    border: OutlineInputBorder(
+                                      borderRadius: BorderRadius.circular(30.r),
+                                    ),
+                                    contentPadding: EdgeInsets.symmetric(
+                                      vertical: 14.h,
+                                      horizontal: 12.w,
+                                    ),
+                                  ),
+                                  hint: Text(AppLocalizations.of(context)!.select_vaccine),
+                                  onChanged: (value) {
+                                    _selectedVaccine = value;
+                                    setState(() {
+                                      _selectedDate = null;
+                                      _selectedCenter = null;
+                                    });
+                                    Provider.of<AppointmentController>(context, listen: false).getAvailableDaysForVaccine(_selectedVaccine!.id);
+                                  },
+                                  items: vaccineController.vaccines.map((vaccine) {
+                                        return DropdownMenuItem(
+                                          value: vaccine,
+                                          child: Text(vaccine.name),
+                                        );
+                                      }).toList(),
+                                ),
+                                SizedBox(height: 10.h),
+                                _buildLabel(AppLocalizations.of(context)!.available_dates),
+                                if (_selectedVaccine != null)
+                                  _buildDates(appointmentController, context),
+                                if (_selectedDate != null)
+                                _buildCenter(appointmentController, context),
+                                // Book Button
+                                if(_selectedVaccine != null && _selectedDate != null && _selectedCenter != null)
+                                SizedBox(height: 15.h,),
+                                if(_selectedVaccine != null && _selectedDate != null && _selectedCenter != null)
+                                  SizedBox(
+                                    width: double.infinity,
+                                    child: ElevatedButton(
+                                      onPressed: _isLoading ? null : _submit,
+                                      style: ElevatedButton.styleFrom(
+                                        backgroundColor: Theme.of(context).secondaryHeaderColor,
+                                        padding: EdgeInsets.symmetric(vertical: 14.h,),
+                                      ),
+                                      child: _isLoading ? CircularProgressIndicator(color: Colors.white, strokeWidth: 1.sp,)
+                                            : Text(AppLocalizations.of(context)!.book, style: TextStyle(fontSize: 16.sp, color: Colors.white,),),
                                   ),
                                 ),
                               ],
-                            ),
-                            if (_selectedUserType == 'child')
-                              _buildLabel(AppLocalizations.of(context)!.child),
-                            if (_selectedUserType == 'child')
-                              DropdownButtonFormField<String?>(
-                                value: _concernedId,
-                                decoration: InputDecoration(
-                                  border: OutlineInputBorder(
-                                    borderRadius: BorderRadius.circular(30.r),
-                                  ),
-                                  contentPadding: EdgeInsets.symmetric(
-                                    vertical: 14.h,
-                                    horizontal: 12.w,
-                                  ),
-                                ),
-                                onChanged: (value) {
-                                  setState(() {
-                                    _concernedId = value;
-                                  });
-                                },
-                                items: childrenController.children.map((child) {
-                                  return DropdownMenuItem(
-                                    value: child.id,
-                                    child: Text('${child.firstName} ${child.familyName}'),
-                                  );
-                                }).toList(),
-                              ),
-                              _buildLabel(AppLocalizations.of(context)!.vaccine),
-                            DropdownButtonFormField<Vaccine?>(
-                              value: _selectedVaccine,
-                              decoration: InputDecoration(
-                                border: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(30.r),
-                                ),
-                                contentPadding: EdgeInsets.symmetric(
-                                  vertical: 14.h,
-                                  horizontal: 12.w,
-                                ),
-                              ),
-                              hint: Text(
-                                AppLocalizations.of(context)!.select_vaccine,
-                              ),
-                              onChanged: (value) {
-                                _selectedVaccine = value;
-                                Provider.of<AppointmentController>(
-                                  context,
-                                  listen: false,
-                                ).getAvailableDaysForVaccine(
-                                  _selectedVaccine!.id,
-                                );
-                              },
-                              items:
-                                  vaccineController.vaccines.map((vaccine) {
-                                    return DropdownMenuItem(
-                                      value: vaccine,
-                                      child: Text(vaccine.name),
-                                    );
-                                  }).toList(),
-                            ),
-                            SizedBox(height: 10.h),
-                            _buildLabel(
-                              AppLocalizations.of(context)!.available_dates,
-                            ),
-                            if (_selectedVaccine != null)
-                              _buildDates(appointmentController, context),
-                            if (_selectedDate != null)
-                              _buildCenter(appointmentController, context),
-                            InkWell(
-                              onTap: () {
-                                if (_selectedVaccine != null &&
-                                    _selectedDate != null &&
-                                    _selectedPoint != null) {
-                                  
-                                }
-                              },
-                              child: Container(
-                                margin: EdgeInsets.symmetric(vertical: 10.h),
-                                padding: EdgeInsets.all(10.w),
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(30),
-                                  color: Theme.of(context).secondaryHeaderColor,
-                                ),
-                                child: Text(
-                                  AppLocalizations.of(context)!.book_appointment,
-                                  style: Theme.of(context).textTheme.titleLarge!.copyWith(color: Colors.white),
-                                ),
-                              ),
-                            ),
-                          ],
-                        );
-                      }
-                    },
+                            );
+                          }
+                        },
+                      ),
+                    ),
                   ),
-                ),
-              ]
+                ],
               ),
             ),
           ),
@@ -352,18 +329,8 @@ class _BookAppointmentScreenState extends State<BookAppointmentScreen> {
     }
     _setUserAnnotation(_mapController!, _selectedPoint);
     if (_selectedDate != null) {
-      Provider.of<AppointmentController>(context, listen: false)
-          .getAvailableCentersForDay(
-            _selectedVaccine!,
-            _selectedDate!,
-            _selectedPoint,
-          )
-          .then((center) {
-            _selectedCenter =
-                Provider.of<AppointmentController>(
-                  context,
-                  listen: false,
-                ).centersWithDistance[0]['center'];
+      Provider.of<AppointmentController>(context, listen: false).getAvailableCentersForDay(_selectedVaccine!, _selectedDate!, _selectedPoint).then((center) {
+            _selectedCenter = Provider.of<AppointmentController>(context, listen: false).centersWithDistance[0]['center'];
             _setCenterAnnotation(_mapController!, _selectedCenter!);
           });
     }
@@ -449,15 +416,8 @@ class _BookAppointmentScreenState extends State<BookAppointmentScreen> {
             hint: Text(AppLocalizations.of(context)!.select_date),
             onChanged: (value) {
               _selectedDate = value!;
-              appointmentController
-                  .getAvailableCentersForDay(
-                    _selectedVaccine!,
-                    _selectedDate!,
-                    _selectedPoint,
-                  )
-                  .then((center) {
-                    _selectedCenter =
-                        appointmentController.centersWithDistance[0]['center'];
+              appointmentController.getAvailableCentersForDay(_selectedVaccine!, _selectedDate!, _selectedPoint,).then((center) {
+                    _selectedCenter = appointmentController.centersWithDistance[0]['center'];
                     _setCenterAnnotation(_mapController!, _selectedCenter!);
                   });
             },
@@ -474,21 +434,14 @@ class _BookAppointmentScreenState extends State<BookAppointmentScreen> {
     }
   }
 
-  Widget _buildCenter(
-    AppointmentController appointmentController,
-    BuildContext context,
-  ) {
+  Widget _buildCenter(AppointmentController appointmentController, BuildContext context) {
     if (appointmentController.isAvailableCentersLoading) {
       return const Center(child: CustomCircularIndicator());
     } else if (appointmentController.isAvailableCentersError) {
       return ErrorRetryWidget(
         message: AppLocalizations.of(context)!.error_server,
         onRetry: () {
-          appointmentController.getAvailableCentersForDay(
-            _selectedVaccine!,
-            _selectedDate!,
-            _selectedPoint,
-          );
+          appointmentController.getAvailableCentersForDay(_selectedVaccine!, _selectedDate!, _selectedPoint);
         },
       );
     } else {
@@ -496,12 +449,22 @@ class _BookAppointmentScreenState extends State<BookAppointmentScreen> {
         children: [
           SizedBox(height: 10.h),
           _buildLabel(AppLocalizations.of(context)!.available_centers),
-          Row(
-            children: [
-              Text(
-                '${appointmentController.centersWithDistance[0]['center'].name} ${_calculateDistance(appointmentController.centersWithDistance[0]['distance'])}',
-              ),
-            ],
+          ListTile(
+            title: Row(
+              children: [
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text('${_selectedCenter?.name}', style: Theme.of(context).textTheme.bodyLarge!.copyWith(fontWeight: FontWeight.bold),),
+                    Text('${_calculateDistance(appointmentController.centersWithDistance.firstWhere((center) => center['center'] == _selectedCenter)['distance'])} ${appointmentController.centersWithDistance.firstWhere((center) => center['center'] == _selectedCenter)['nearest'] != null ? '(${AppLocalizations.of(context)!.nearest})' : ''}'),
+                  ],
+                ),
+                Spacer(),
+                TextButton(onPressed: () {
+                  _changeCenter();
+                }, child: Text(AppLocalizations.of(context)!.change, style: Theme.of(context).textTheme.bodyLarge!.copyWith(color: Theme.of(context).secondaryHeaderColor, fontWeight: FontWeight.bold),)),
+              ],
+            ),
           ),
         ],
       );
@@ -598,4 +561,95 @@ class _BookAppointmentScreenState extends State<BookAppointmentScreen> {
       return '${(distance / 1000).toStringAsFixed(1)} ${AppLocalizations.of(context)!.km}';
     }
   }
+
+  void _changeCenter() {
+    final appointmentController = Provider.of<AppointmentController>(context, listen: false);
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: Text(AppLocalizations.of(context)!.change_center),
+          content: DropdownButtonFormField<Object>(
+            value: _selectedCenter,
+            decoration: InputDecoration(
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(30.r),
+              ),
+              contentPadding: EdgeInsets.symmetric(
+                vertical: 14.h,
+                horizontal: 12.w,
+              ),
+            ),
+            hint: Text(AppLocalizations.of(context)!.select_center),
+            onChanged: (value) {
+              setState(() {
+                _selectedCenter = value as VaccinationCenter?;
+              });
+              _setCenterAnnotation(_mapController!, _selectedCenter!);
+            },
+            items: appointmentController.centersWithDistance.map((center) {
+              return DropdownMenuItem(
+                value: center['center'],
+                child: Text('${center['center'].name} - ${_calculateDistance(center['distance'])} ${center['nearest'] != null ? '(${AppLocalizations.of(context)!.nearest})' : ''}'),
+              );
+            }).toList(),
+          ),
+          actions: [
+            TextButton(
+              child: Text(AppLocalizations.of(context)!.cancel),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+            TextButton(
+              child: Text(AppLocalizations.of(context)!.ok),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+  
+  void _showSnackBar(String message) {
+    if (!mounted) return;
+    ScaffoldMessenger.of(
+      context,
+    ).showSnackBar(SnackBar(content: Text(message)));
+  }
+
+  void _submit() async {
+    final appointmentController = Provider.of<AppointmentController>(context, listen: false);
+  
+    setState(() {
+      _isLoading = true;
+     });
+  
+    try {
+      await appointmentController.bookAppointment(
+      _concernedId!,
+      _selectedVaccine!.id,
+      _selectedDate!,
+      _selectedCenter!.id,
+      context
+    );
+    
+    if(mounted) {
+      _showSnackBar(AppLocalizations.of(context)!.appointment_booked_successfully);
+      Navigator.pushReplacementNamed(context, '/main');
+    }
+  } catch (e) {
+    if(mounted) {
+      _showSnackBar(e.toString().replaceFirst('Exception: ', ''));
+    }
+  } finally {
+    if(mounted) {
+      setState(() {
+        _isLoading = false;
+      });
+    }
+  }
+}
 }

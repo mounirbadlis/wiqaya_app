@@ -15,7 +15,8 @@ class SecureStorageService {
 
   // Read a value
   Future<String?> read(String key) async {
-    return await _storage.read(key: key);
+    final value = await _storage.read(key: key);
+    return value;
   }
 
   // Delete a value

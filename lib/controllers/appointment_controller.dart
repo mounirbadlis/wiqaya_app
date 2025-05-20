@@ -1,3 +1,4 @@
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:mapbox_maps_flutter/mapbox_maps_flutter.dart';
@@ -6,6 +7,7 @@ import 'package:wiqaya_app/models/appointment.dart';
 import 'package:wiqaya_app/models/user.dart';
 import 'package:wiqaya_app/models/vaccine.dart';
 import 'package:wiqaya_app/models/vaccination_center.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class AppointmentController extends ChangeNotifier {
   final ApiClient _apiClient = ApiClient();
@@ -74,7 +76,7 @@ class AppointmentController extends ChangeNotifier {
               }).toList();
 
       centersWithDistance.sort((a, b) => a['distance']!.compareTo(b['distance']!));
-      print(centersWithDistance);
+      centersWithDistance[0]['nearest'] = true;
     } catch (e) {
       print('getAvailableCentersForDay failed: $e');
       availableCenters = [];
@@ -84,4 +86,55 @@ class AppointmentController extends ChangeNotifier {
       notifyListeners();
     }
   }
+
+  // Future<void> bookAppointment(String individualId, String vaccineId, DateTime date, String centerId, BuildContext context) async {
+  //   try {
+  //     final response = await _apiClient.post('/appointments', data: {
+  //       'individual_id': individualId,
+  //       'vaccine_id': vaccineId,
+  //       'date': date.add(const Duration(days: 1)).toIso8601String(),
+  //       'center_id': centerId,
+  //     });
+  //     print('bookAppointment response: ${response.data}');
+  //     if(response.statusCode == 201) {
+  //       newAppointment = Appointment.fromJson(response.data);
+  //     }
+  //   } on DioException catch (e) {
+  //     print('bookAppointment failed: $e');
+  //     if(e.response?.statusCode == 400) {
+  //       throw Exception(AppLocalizations.of(context)!.no_available_slots);
+  //     } else if(e.response?.statusCode == 500) {
+  //       throw Exception(AppLocalizations.of(context)!.error_server);
+  //     } else {
+  //       throw Exception(AppLocalizations.of(context)!.error_connection);
+  //     }
+  //   }
+  // }
+  Future<void> bookAppointment(String individualId, String vaccineId, DateTime date, String centerId, BuildContext context) async {
+  try {
+    final response = await _apiClient.post('/appointments', data: {
+      'individual_id': individualId,
+      'vaccine_id': vaccineId,
+      'date': date.toIso8601String(),
+      'center_id': centerId,
+    });
+    print('bookAppointment response: ${response.data}');
+    if(response.statusCode == 201) {
+      newAppointment = Appointment.fromJson(response.data);
+    }
+  } on DioException catch (e) {
+    print('bookAppointment failed: $e');
+    // Print more detailed error information
+    print('Error response data: ${e.response?.data}');
+    print('Error response status code: ${e.response?.statusCode}');
+    
+    if(e.response?.statusCode == 400) {
+      throw Exception(AppLocalizations.of(context)!.no_available_slots);
+    } else if(e.response?.statusCode == 500) {
+      throw Exception(AppLocalizations.of(context)!.error_server);
+    } else {
+      throw Exception(AppLocalizations.of(context)!.error_connection);
+    }
+  }
+}
 }

@@ -130,5 +130,13 @@
   "select_vaccine": "Select Vaccine",
   "available_dates": "Available Dates",
   "select_date": "Select Date",
-  "available_centers": "Available Centers"
+  "available_centers": "Available Centers",
+  "nearest": "the nearest",
+  "change": "Change",
+  "change_center": "Change Center",
+  "select_center": "Select Center",
+  "ok": "OK",
+  "book": "Book",
+  "no_available_slots": "No available slots",
+  "appointment_booked_successfully": "Appointment booked successfully"
 }
