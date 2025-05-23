@@ -138,5 +138,15 @@
   "ok": "OK",
   "book": "Book",
   "no_available_slots": "No available slots",
-  "appointment_booked_successfully": "Appointment booked successfully"
+  "appointment_booked_successfully": "Appointment booked successfully",
+  "mark_all_as_read": "Mark all as read",
+  "days_ago": "days ago",
+  "hours_ago": "hours ago",
+  "minutes_ago": "minutes ago",
+  "seconds_ago": "seconds ago",
+  "receiver": "Receiver",
+  "has_fever_question": "Has Fever?",
+  "has_fever_hint": "If the individual has a fever, the appointment will be postponed for 24 hours.",
+  "on_treatment_question": "On Treatment?",
+  "on_treatment_hint": "If the individual is under treatment, select the end date. The appointment will be postponed to that date."
 }

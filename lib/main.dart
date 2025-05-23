@@ -11,11 +11,13 @@ import 'package:wiqaya_app/controllers/auth_controller.dart';
 import 'package:wiqaya_app/controllers/children_controller.dart';
 import 'package:wiqaya_app/controllers/historical_record_controller.dart';
 import 'package:wiqaya_app/controllers/vaccine_controller.dart';
+import 'package:wiqaya_app/controllers/reminder_controller.dart';
 import 'package:wiqaya_app/firebase_options.dart';
 import 'package:wiqaya_app/providers/locale_provider.dart';
 import 'package:wiqaya_app/views/appointment/appointment_details_screen.dart';
 import 'package:wiqaya_app/views/appointment/appointments_screen.dart';
 import 'package:wiqaya_app/views/appointment/book_appointment_screen.dart';
+import 'package:wiqaya_app/views/appointment/health_questions_screen.dart';
 import 'package:wiqaya_app/views/auth/login_screen.dart';
 import 'package:wiqaya_app/views/auth/register_screen.dart';
 import 'package:wiqaya_app/views/children/add_child_screen.dart';
@@ -23,6 +25,7 @@ import 'package:wiqaya_app/views/children/child_history_screen.dart';
 import 'package:wiqaya_app/views/children/children_screen.dart';
 import 'package:wiqaya_app/views/children/required_ages_screen.dart';
 import 'package:wiqaya_app/views/main_screen.dart';
+import 'package:wiqaya_app/views/reminder/reminders_screen.dart';
 import 'package:wiqaya_app/views/splash_screen.dart';
 import 'package:wiqaya_app/views/vaccine/vaccine_details_screen.dart';
 import 'package:wiqaya_app/views/vaccine/vaccines_screen.dart';
@@ -57,6 +60,7 @@ Future<void> main() async {
         ChangeNotifierProvider(create: (_) => HistoricalRecordController()),
         ChangeNotifierProvider(create: (_) => VaccineController()),
         ChangeNotifierProvider(create: (_) => AppointmentController()),
+        ChangeNotifierProvider(create: (_) => ReminderController()),
       ],
       child: ScreenUtilInit(
         //designSize: const ui.Size(375, 812),
@@ -190,6 +194,10 @@ class MyApp extends StatelessWidget {
         '/appointments': (context) => const AppointmentsScreen(),
         '/appointments/details': (context) => AppointmentDetailsScreen(),
         '/appointments/book': (context) => const BookAppointmentScreen(),
+        '/appointments/health_questions': (context) => const HealthQuestionsScreen(),
+
+        //reminders
+        '/reminders': (context) => const RemindersScreen(),
 
         //splash
         '/splash': (context) => const SplashScreen(),

@@ -16,12 +16,7 @@ class VaccineDetailsScreen extends StatelessWidget {
     _setRequiredAges(context);
     return Scaffold(
       appBar: AppBar(
-        title: Text(
-          '${vaccine!.name} Vaccine',
-          style: Theme.of(
-            context,
-          ).textTheme.headlineMedium!.copyWith(color: Colors.white),
-        ),
+        title: Text('${vaccine!.name} Vaccine', style: Theme.of(context).textTheme.headlineMedium!.copyWith(color: Colors.white)),
         backgroundColor: Theme.of(context).secondaryHeaderColor,
         leading: IconButton(
           icon: const Icon(Icons.arrow_back, color: Colors.white),

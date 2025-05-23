@@ -1,13 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:hugeicons/hugeicons.dart';
 import 'package:iconsax_flutter/iconsax_flutter.dart';
+import 'package:provider/provider.dart';
+import 'package:wiqaya_app/controllers/reminder_controller.dart';
 import 'package:wiqaya_app/models/user.dart';
 import 'package:wiqaya_app/views/appointment/appointments_screen.dart';
 import 'package:wiqaya_app/views/children/children_screen.dart';
 import 'package:wiqaya_app/views/histrical_record/histrical_records.dart';
 import 'package:wiqaya_app/widgets/drawer/drawer.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:wiqaya_app/widgets/reminder/reminders_custom_icon.dart';
 
 class MainScreen extends StatefulWidget {
   MainScreen({super.key, this.selectedIndex = 0});
@@ -32,6 +34,15 @@ class _MainScreenState extends State<MainScreen> {
   }
 
   @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      final reminderController = Provider.of<ReminderController>(context, listen: false);
+      reminderController.getUnseenCount();
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
     return PopScope(
       canPop: false,
@@ -45,7 +56,10 @@ class _MainScreenState extends State<MainScreen> {
         appBar: AppBar(
           backgroundColor: Theme.of(context).secondaryHeaderColor,
           iconTheme: const IconThemeData(color: Colors.white),
-          title: Text(_getAppBarTitle(), style: Theme.of(context).textTheme.headlineLarge!.copyWith(color: Colors.white)),
+          title: Text(_getAppBarTitle(), style: Theme.of(context).textTheme.headlineMedium!.copyWith(color: Colors.white)),
+          actions: [
+            RemindersCustomIcon(),
+          ],
         ),
         body: _pages[widget.selectedIndex],
         bottomNavigationBar: Container(

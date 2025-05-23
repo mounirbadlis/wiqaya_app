@@ -42,12 +42,7 @@ class _VaccinesScreenState extends State<VaccinesScreen> {
         appBar: AppBar(
           backgroundColor: Theme.of(context).secondaryHeaderColor,
           iconTheme: const IconThemeData(color: Colors.white),
-          title: Text(
-            AppLocalizations.of(context)!.vaccines,
-            style: Theme.of(
-              context,
-            ).textTheme.headlineMedium!.copyWith(color: Colors.white),
-          ),
+          title: Text(AppLocalizations.of(context)!.vaccines, style: Theme.of(context).textTheme.headlineMedium!.copyWith(color: Colors.white)),
         ),
         body: Container(
           color: Theme.of(context).secondaryHeaderColor,

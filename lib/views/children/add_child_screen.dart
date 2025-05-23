@@ -112,10 +112,7 @@ class _AddChildScreenState extends State<AddChildScreen> {
               Navigator.pushNamed(context, '/main', arguments: MainScreen(selectedIndex: 2));
             },
           ),
-          title: Text(
-            loc.add_child, 
-            style: Theme.of(context).textTheme.headlineMedium!.copyWith(color: Colors.white)
-          ),
+          title: Text(loc.add_child, style: Theme.of(context).textTheme.headlineMedium!.copyWith(color: Colors.white)),
         ),
         body: Container(
           color: Theme.of(context).secondaryHeaderColor,

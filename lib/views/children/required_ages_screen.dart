@@ -78,10 +78,7 @@ class _RequiredAgesScreenState extends State<RequiredAgesScreen> {
               Navigator.pop(context);
             },
           ),
-          title: Text(
-            loc.record ?? 'Vaccine History',
-            style: Theme.of(context).textTheme.headlineMedium!.copyWith(color: Colors.white)
-          ),
+          title: Text(loc.record ?? 'Vaccine History', style: Theme.of(context).textTheme.headlineMedium!.copyWith(color: Colors.white)),
         ),
         body: Container(
           color: Theme.of(context).secondaryHeaderColor,
