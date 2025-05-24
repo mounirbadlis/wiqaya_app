@@ -35,7 +35,6 @@ class _BookAppointmentScreenState extends State<BookAppointmentScreen> {
   DateTime? _selectedDate;
   String _concernedId = User.user!.id;
   bool _isLoading = false;
-
   List<Map<String, double>> _routePoints = [];
   Point _selectedPoint = Point(coordinates: Position(10.6328, 36.8902));
   late final PointAnnotationManager pointAnnotationManager;
@@ -90,31 +89,31 @@ class _BookAppointmentScreenState extends State<BookAppointmentScreen> {
                 top: Radius.circular(20),
               ),
             ),
-            child: SingleChildScrollView(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  ClipRRect(
-                    borderRadius: const BorderRadius.vertical(
-                      top: Radius.circular(20),
-                    ),
-                    child: SizedBox(
-                      height: 200.h,
-                      child: MapWidget(
-                        styleUri: MapboxStyles.MAPBOX_STREETS,
-                        cameraOptions: initialCamera,
-                        onMapCreated: (controller) {
-                          _mapController = controller;
-                          _setInitialLocation();
-                        },
-                        onLongTapListener: _onMapTap,
-                      ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                ClipRRect(
+                  borderRadius: const BorderRadius.vertical(
+                    top: Radius.circular(20),
+                  ),
+                  child: SizedBox(
+                    height: 200.h,
+                    child: MapWidget(
+                      styleUri: MapboxStyles.MAPBOX_STREETS,
+                      cameraOptions: initialCamera,
+                      onMapCreated: (controller) {
+                        _mapController = controller;
+                        _setInitialLocation();
+                      },
+                      onLongTapListener: _onMapTap,
                     ),
                   ),
-                  Text(AppLocalizations.of(context)!.pick_instructions,
-                    style: Theme.of(context).textTheme.bodySmall!.copyWith(color: Colors.grey),
-                  ),
-                  SingleChildScrollView(
+                ),
+                Text(AppLocalizations.of(context)!.pick_instructions,
+                  style: Theme.of(context).textTheme.bodySmall!.copyWith(color: Colors.grey),
+                ),
+                Expanded(
+                  child: SingleChildScrollView(
                     child: Container(
                       padding: EdgeInsets.symmetric(horizontal: 5.w),
                       child: Consumer3<AppointmentController,VaccineController,ChildrenController>(
@@ -251,8 +250,8 @@ class _BookAppointmentScreenState extends State<BookAppointmentScreen> {
                       ),
                     ),
                   ),
-                ],
-              ),
+                ),
+              ],
             ),
           ),
         ),
@@ -357,10 +356,7 @@ class _BookAppointmentScreenState extends State<BookAppointmentScreen> {
     pointAnnotationManager.create(pointAnnotationOptions);
   }
 
-  Future<void> _setCenterAnnotation(
-    MapboxMap mapboxMap,
-    VaccinationCenter center,
-  ) async {
+  Future<void> _setCenterAnnotation(MapboxMap mapboxMap, VaccinationCenter center) async {
     // Load the image from assets
     final ByteData bytes = await rootBundle.load(
       'assets/icons/hospital_location_icon.png',

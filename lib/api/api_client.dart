@@ -61,5 +61,6 @@ class ApiClient {
   }
 
   Future<Response> get(String path, {dynamic data}) => dio.get(path, data: data);
-  Future<Response> post(String path, {dynamic data}) =>dio.post(path, data: data);
+  Future<Response> post(String path, {dynamic data}) => dio.post(path, data: data);
+  Future<Response> patch(String path, {dynamic data}) => dio.patch(path, data: data);
 }

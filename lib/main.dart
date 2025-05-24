@@ -17,7 +17,9 @@ import 'package:wiqaya_app/providers/locale_provider.dart';
 import 'package:wiqaya_app/views/appointment/appointment_details_screen.dart';
 import 'package:wiqaya_app/views/appointment/appointments_screen.dart';
 import 'package:wiqaya_app/views/appointment/book_appointment_screen.dart';
+import 'package:wiqaya_app/views/appointment/finding_nearest_center_screen.dart';
 import 'package:wiqaya_app/views/appointment/health_questions_screen.dart';
+import 'package:wiqaya_app/views/appointment/posponing_result_screen.dart';
 import 'package:wiqaya_app/views/auth/login_screen.dart';
 import 'package:wiqaya_app/views/auth/register_screen.dart';
 import 'package:wiqaya_app/views/children/add_child_screen.dart';
@@ -195,6 +197,8 @@ class MyApp extends StatelessWidget {
         '/appointments/details': (context) => AppointmentDetailsScreen(),
         '/appointments/book': (context) => const BookAppointmentScreen(),
         '/appointments/health_questions': (context) => const HealthQuestionsScreen(),
+        '/appointments/health_questions/result': (context) => PosponingResultScreen(),
+        '/appointments/health_questions/nearest': (context) => FindingNearestCenterScreen(),
 
         //reminders
         '/reminders': (context) => const RemindersScreen(),

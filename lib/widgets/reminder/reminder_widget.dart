@@ -15,7 +15,7 @@ class ReminderWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return InkWell(
       onTap: () {
-        if (reminder.type == 1) {
+        if (reminder.type == 1 && reminder.isSolved == false) {
           Provider.of<ReminderController>(context, listen: false).selectedReminder = reminder;
           Navigator.pushNamed(context, '/appointments/health_questions');
         }

@@ -6,7 +6,7 @@ class Reminder {
   final String? childId;
   final String? childFirstName;
   final String? childFamilyName;
-  final DateTime? bookAfter;
+  DateTime? bookAfter;
   final DateTime createdAt;
   final String title;
   final String message;

@@ -125,18 +125,7 @@ class _RequiredAgesScreenState extends State<RequiredAgesScreen> {
                       backgroundColor: Theme.of(context).secondaryHeaderColor,
                       padding: EdgeInsets.symmetric(vertical: 14.h),
                     ),
-                    child: _isLoading
-                        ? CircularProgressIndicator(
-                          color: Colors.white,
-                          strokeWidth: 1.sp,
-                        )
-                        : Text(
-                      loc.add,
-                      style: TextStyle(
-                        fontSize: 16.sp,
-                        color: Colors.white,
-                      ),
-                    ),
+                    child: _isLoading ? CircularProgressIndicator(color: Colors.white, strokeWidth: 1.sp,) : Text(loc.add, style: TextStyle(fontSize: 16.sp,color: Colors.white),),
                   ),
                 ),
               ],

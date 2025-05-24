@@ -19,8 +19,7 @@ class AppointmentDetailsScreen extends StatefulWidget {
   const AppointmentDetailsScreen({super.key});
 
   @override
-  State<AppointmentDetailsScreen> createState() =>
-      _AppointmentDetailsScreenState();
+  State<AppointmentDetailsScreen> createState() => _AppointmentDetailsScreenState();
 }
 
 class _AppointmentDetailsScreenState extends State<AppointmentDetailsScreen> {
@@ -29,6 +28,7 @@ class _AppointmentDetailsScreenState extends State<AppointmentDetailsScreen> {
   List<Map<String, double>> _routePoints = [];
   bool _isLoading = false;
   String _distance = '';
+  PointAnnotationManager? _pointAnnotationManager;
 
   @override
   void initState() {
@@ -136,6 +136,27 @@ class _AppointmentDetailsScreenState extends State<AppointmentDetailsScreen> {
     );
   }
 
+  Future<void> _setUserAnnotation(MapboxMap mapboxMap, Point point) async {
+    // Load the image from assets
+    final ByteData bytes = await rootBundle.load(
+      'assets/icons/user_position_icon.png',
+    );
+    final Uint8List imageData = bytes.buffer.asUint8List();
+
+    // Create a PointAnnotationOptions
+    PointAnnotationOptions pointAnnotationOptions = PointAnnotationOptions(
+      geometry: Point(
+        coordinates: Position(point.coordinates.lng, point.coordinates.lat),
+      ), // Example coordinates
+      image: imageData,
+      iconSize: 0.25,
+    );
+
+    // Add the annotation to the map
+    _pointAnnotationManager!.deleteAll();
+    _pointAnnotationManager!.create(pointAnnotationOptions);
+  }
+
   Future<void> _getUserLocationAndRoute() async {
     setState(() {
       _isLoading = true;
@@ -144,10 +165,22 @@ class _AppointmentDetailsScreenState extends State<AppointmentDetailsScreen> {
     final appointment = controller.selectedAppointment!;
     final centerLat = appointment.center!.latitude!;
     final centerLng = appointment.center!.longitude!;
-
     // Get user location
+    bool serviceEnabled = await geo.Geolocator.isLocationServiceEnabled();
+    geo.LocationPermission permission = await geo.Geolocator.checkPermission();
+    _pointAnnotationManager = await _mapController!.annotations.createPointAnnotationManager();
+    if (!serviceEnabled || permission == geo.LocationPermission.denied) {
+      permission = await geo.Geolocator.requestPermission();
+      if (permission == geo.LocationPermission.denied ||
+          permission == geo.LocationPermission.deniedForever) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Location permission denied')),
+        );
+        return;
+      }
+    }
     final position = await geo.Geolocator.getCurrentPosition();
-
+    _setUserAnnotation(_mapController!, Point(coordinates: Position(position.longitude, position.latitude)));
     // Build Mapbox Directions API URL
     final accessToken =
         'pk.eyJ1IjoibW91bmlyYmFkbGlzMiIsImEiOiJjbTl6emg5YjgwaGRyMmxzZng1cTkxa256In0.FCAWFO7Iqz5t4u2dGqSDwA'; // Replace with real token

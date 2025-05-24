@@ -137,6 +137,8 @@
   "select_center": "Select Center",
   "ok": "OK",
   "book": "Book",
+  "continue_": "Continue",
+  "postpone": "Postpone",
   "no_available_slots": "No available slots",
   "appointment_booked_successfully": "Appointment booked successfully",
   "mark_all_as_read": "Mark all as read",
@@ -146,7 +148,14 @@
   "seconds_ago": "seconds ago",
   "receiver": "Receiver",
   "has_fever_question": "Has Fever?",
-  "has_fever_hint": "If the individual has a fever, the appointment will be postponed for 24 hours.",
+  "has_fever_hint": "If the individual has a fever, the appointment will be postponed for 48 hours.",
   "on_treatment_question": "On Treatment?",
-  "on_treatment_hint": "If the individual is under treatment, select the end date. The appointment will be postponed to that date."
+  "on_treatment_hint": "If the individual is under treatment, select the end date. The appointment will be postponed to that date.",
+  "postponing_success": "The appointment has been postponed successfully.",
+  "postponing_message": "The vaccination is postponed to",
+  "reason": "Reason",
+  "fever": "Fever",
+  "treatment": "on Treatment",
+  "finding_nearest_center": "Finding nearest center",
+  "no_centers_found": "No centers found"
 }
