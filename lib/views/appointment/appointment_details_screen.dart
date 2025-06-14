@@ -307,21 +307,11 @@ class _AppointmentDetailsScreenState extends State<AppointmentDetailsScreen> {
           margin: EdgeInsets.symmetric(horizontal: 10.w),
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(20),
-            color: Colors.yellow,
-          ),
-          child: Text(AppLocalizations.of(context)!.pending, style: Theme.of(context).textTheme.bodyLarge!.copyWith(color: Colors.white, fontWeight: FontWeight.bold)),
-        );
-      case 2:
-        return Container(
-          padding: EdgeInsets.all(8.w),
-          margin: EdgeInsets.symmetric(horizontal: 10.w),
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(20),
             color: Colors.blue,
           ),
           child: Text(AppLocalizations.of(context)!.confirmed, style: Theme.of(context).textTheme.bodyLarge!.copyWith(color: Colors.white, fontWeight: FontWeight.bold)),
         );
-      case 3:
+      case 2:
         return Container(
           padding: EdgeInsets.all(8.w),
           margin: EdgeInsets.symmetric(horizontal: 10.w),
@@ -331,7 +321,7 @@ class _AppointmentDetailsScreenState extends State<AppointmentDetailsScreen> {
           ),
           child: Text(AppLocalizations.of(context)!.completed, style: Theme.of(context).textTheme.bodyLarge!.copyWith(color: Colors.white, fontWeight: FontWeight.bold)),
         );
-      case 4:
+      case 3:
         return Container(
           padding: EdgeInsets.all(8.w),
           margin: EdgeInsets.symmetric(horizontal: 10.w),
@@ -347,9 +337,9 @@ class _AppointmentDetailsScreenState extends State<AppointmentDetailsScreen> {
           margin: EdgeInsets.symmetric(horizontal: 10.w),
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(20),
-            color: Colors.yellow,
+            color: Colors.blue,
           ),
-          child: Text(AppLocalizations.of(context)!.pending, style: Theme.of(context).textTheme.bodyLarge!.copyWith(color: Colors.white, fontWeight: FontWeight.bold)),
+          child: Text(AppLocalizations.of(context)!.confirmed, style: Theme.of(context).textTheme.bodyLarge!.copyWith(color: Colors.white, fontWeight: FontWeight.bold)),
         );
     }
   }

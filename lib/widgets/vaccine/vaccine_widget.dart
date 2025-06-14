@@ -72,13 +72,16 @@ class VaccineWidget extends StatelessWidget {
   }
 
   void _setRequiredAges(BuildContext context) {
-    if(vaccine.requiredAges?.length == 1){
-      if(vaccine.requiredAges?[0] == 0){
+    if (vaccine.requiredAges?.isEmpty ?? true) {
+      requredAges = '';
+      return;
+    } else if (vaccine.requiredAges?.length == 1) {
+      if (vaccine.requiredAges?[0] == 0) {
         requredAges = AppLocalizations.of(context)!.birth;
-      }else{
+      } else {
         requredAges = '${vaccine.requiredAges?[0]} ${AppLocalizations.of(context)!.month}';
       }
-    }else{
+    } else {
       requredAges = '${vaccine.requiredAges!.join(', ')} ${AppLocalizations.of(context)!.months}';
     }
   }

@@ -58,6 +58,9 @@
 
   "retry": "إعادة المحاولة",
 
+  "hi": "مرحبًا",
+  "today_appointments": "مواعيد اليوم",
+
   "home": "الرئيسية",
   "appointments": "المواعيد",
   "my_children": "أطفالي",
@@ -156,5 +159,12 @@
   "fever": "حمى",
   "treatment": "تحت العلاج",
   "finding_nearest_center": "إيجاد المركز الأقرب",
-  "no_centers_found": "لم يتم العثور على مراكز التطعيم"
+  "no_centers_found": "لم يتم العثور على مراكز التطعيم",
+  "permission_denied": "تم رفض إذن",
+  "pdf_saved": "تم حفظ PDF بنجاح",
+  "created_at": "تاريخ الإنشاء",
+  "completd_name": "الإسم الكامل",
+  "parent_name": "اسم الأب",
+  "side_effects": "الأعراض الجانبية",
+  "no_specific_ages": "لا يوجد أعمار محددة"
 }

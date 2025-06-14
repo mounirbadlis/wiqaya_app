@@ -80,7 +80,8 @@ class AuthController extends ChangeNotifier {
     required String bloodType,
     required BuildContext context,
   }) async {
-    final token = await _secureStorage.read('device_token');
+    final token = await FirebaseMessaging.instance.getToken();
+    _deviceToken = token;
     print('Device token from storage: $token');
 
     try {
@@ -110,13 +111,16 @@ class AuthController extends ChangeNotifier {
         await _secureStorage.write('access_token', _accessToken!);
         await _secureStorage.write('refresh_token', _refreshToken!);
         await _secureStorage.write('device_token', token!);
-
+        print('access token: $_accessToken');
+        print('refresh token: $_refreshToken');
+        print('device token: $token');
         notifyListeners();
       } else {
         print('Unexpected response from server: ${response.data}');
         throw Exception('Unexpected response from server');
       }
     } on DioException catch (e) {
+      print('DioException: $e');
       final status = e.response?.statusCode;
       if (status == 400) {
         throw Exception(AppLocalizations.of(context)!.error_email_or_phone_exists);

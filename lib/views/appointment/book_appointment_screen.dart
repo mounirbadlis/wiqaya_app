@@ -565,30 +565,32 @@ class _BookAppointmentScreenState extends State<BookAppointmentScreen> {
       builder: (context) {
         return AlertDialog(
           title: Text(AppLocalizations.of(context)!.change_center),
-          content: DropdownButtonFormField<Object>(
-            value: _selectedCenter,
-            decoration: InputDecoration(
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(30.r),
+          content: SizedBox(
+            width: double.infinity,
+            child: DropdownButtonFormField<Object>(
+              value: _selectedCenter,
+              decoration: InputDecoration(
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(30.r),
+                ),
+                contentPadding: EdgeInsets.symmetric(
+                  vertical: 14.h,
+                ),
               ),
-              contentPadding: EdgeInsets.symmetric(
-                vertical: 14.h,
-                horizontal: 12.w,
-              ),
+              hint: Text(AppLocalizations.of(context)!.select_center, overflow: TextOverflow.ellipsis,),
+              onChanged: (value) {
+                setState(() {
+                  _selectedCenter = value as VaccinationCenter?;
+                });
+                _setCenterAnnotation(_mapController!, _selectedCenter!);
+              },
+              items: appointmentController.centersWithDistance.map((center) {
+                return DropdownMenuItem(
+                  value: center['center'],
+                  child: Text('${center['center'].name} - ${_calculateDistance(center['distance'])} ${center['nearest'] != null ? '(${AppLocalizations.of(context)!.nearest})' : ''}'),
+                );
+              }).toList(),
             ),
-            hint: Text(AppLocalizations.of(context)!.select_center),
-            onChanged: (value) {
-              setState(() {
-                _selectedCenter = value as VaccinationCenter?;
-              });
-              _setCenterAnnotation(_mapController!, _selectedCenter!);
-            },
-            items: appointmentController.centersWithDistance.map((center) {
-              return DropdownMenuItem(
-                value: center['center'],
-                child: Text('${center['center'].name} - ${_calculateDistance(center['distance'])} ${center['nearest'] != null ? '(${AppLocalizations.of(context)!.nearest})' : ''}'),
-              );
-            }).toList(),
           ),
           actions: [
             TextButton(
@@ -618,17 +620,23 @@ class _BookAppointmentScreenState extends State<BookAppointmentScreen> {
 
   void _submit() async {
     final appointmentController = Provider.of<AppointmentController>(context, listen: false);
-  
+    int type;
     setState(() {
       _isLoading = true;
      });
   
     try {
+      if(_selectedUserType == 'parent') {
+        type = 1;
+      } else {
+        type = 2;
+      }
       await appointmentController.bookAppointment(
       _concernedId!,
       _selectedVaccine!.id,
       _selectedDate!,
       _selectedCenter!.id,
+      type,
       context
     );
     

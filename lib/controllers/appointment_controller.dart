@@ -23,6 +23,9 @@ class AppointmentController extends ChangeNotifier {
   bool isLoading = true;
   bool hasError = false;
 
+  bool isTodayAppointmentsLoading = true;
+  bool isTodayAppointmentsError = false;
+
   bool isAvailableCentersLoading = true;
   bool isAvailableCentersError = false;
 
@@ -39,6 +42,23 @@ class AppointmentController extends ChangeNotifier {
       hasError = true;
     } finally {
       isLoading = false;
+      notifyListeners();
+    }
+  }
+
+  Future<void> getTodayAppointments(String id) async {
+    try {
+      isTodayAppointmentsLoading = true;
+      isTodayAppointmentsError = false;
+      notifyListeners();
+      final response = await _apiClient.get('/appointments/today/$id');
+      appointments = Appointment.appointmentsFromJson(response.data);
+    } catch (e) {
+      print('getTodayAppointments failed: $e');
+      appointments = [];
+      isTodayAppointmentsError = true;
+    } finally {
+      isTodayAppointmentsLoading = false;
       notifyListeners();
     }
   }
@@ -114,8 +134,10 @@ class AppointmentController extends ChangeNotifier {
     } on DioException catch (e) {
       print('getAvailableCentersAutomatically failed: $e');
       recommendedCenters = [];
-      if(e.response?.statusCode == 404) {
+      if (e.response?.statusCode == 404) {
         isAvailableCentersError = false;
+      } else {
+        isAvailableCentersError = true;
       }
     } finally {
       isAvailableCentersLoading = false;
@@ -123,18 +145,20 @@ class AppointmentController extends ChangeNotifier {
     }
   }
 
-  Future<void> bookAppointment(String individualId, String vaccineId, DateTime date, String centerId, BuildContext context) async {
+  Future<void> bookAppointment(String individualId, String vaccineId, DateTime date, String centerId, int type, BuildContext context) async {
     try {
       final response = await _apiClient.post('/appointments', data: {
         'individual_id': individualId,
         'vaccine_id': vaccineId,
         'date': date.toIso8601String(),
         'center_id': centerId,
+        'type': type,
       });
       if(response.statusCode == 201) {
         newAppointment = Appointment.fromJson(response.data);
       }
     } on DioException catch (e) {
+      print('bookAppointment failed: $e');
       if(e.response?.statusCode == 400) {
         throw Exception(AppLocalizations.of(context)!.no_available_slots);
       } else if(e.response?.statusCode == 500) {

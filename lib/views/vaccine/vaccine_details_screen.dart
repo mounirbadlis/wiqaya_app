@@ -70,6 +70,22 @@ class VaccineDetailsScreen extends StatelessWidget {
                   style: Theme.of(context).textTheme.bodyLarge!.copyWith(color: Colors.grey[700]),
                 ),
               ),
+              SizedBox(height: 16.h),
+              ListTile(
+                tileColor: Theme.of(context).primaryColor.withAlpha(255),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                title: Text(
+                  AppLocalizations.of(context)!.side_effects,
+                  style: Theme.of(context).textTheme.headlineSmall!,
+                ),
+                subtitle: Text(
+                  '- ${vaccine!.sideEffects!.join('\n- ')}',
+                  style: Theme.of(context).textTheme.bodyLarge!.copyWith(color: Colors.grey[700]),
+                  textAlign: TextAlign.left,
+                ),
+              ),
             ],
           ),
         ),
@@ -78,6 +94,10 @@ class VaccineDetailsScreen extends StatelessWidget {
   }
 
   void _setRequiredAges(BuildContext context) {
+    if (vaccine?.requiredAges?.isEmpty ?? true) {
+      requredAges = AppLocalizations.of(context)!.no_specific_ages;
+      return;
+    }
     if (vaccine?.requiredAges?.length == 1) {
       if (vaccine?.requiredAges?[0] == 0) {
         requredAges = AppLocalizations.of(context)!.birth;

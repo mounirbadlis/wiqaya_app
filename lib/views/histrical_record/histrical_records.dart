@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:hugeicons/hugeicons.dart';
 import 'package:provider/provider.dart';
 import 'package:wiqaya_app/controllers/historical_record_controller.dart';
+import 'package:wiqaya_app/services/pdf_generator_service.dart';
 import 'package:wiqaya_app/widgets/historical_record/historical_record_widget.dart';
 import 'package:wiqaya_app/widgets/shared/custom_circular_indicator.dart';
 import 'package:wiqaya_app/widgets/shared/error_retry_widget.dart';
@@ -14,7 +16,8 @@ class HistoricalRecords extends StatefulWidget {
   bool isParent = true;
 
   @override
-  State<StatefulWidget> createState() => _HistoricalRecordsState();
+  State<StatefulWidget> createState() => _HistoricalRecordsState(); 
+
 }
 
 class _HistoricalRecordsState extends State<HistoricalRecords> {
@@ -42,48 +45,71 @@ class _HistoricalRecordsState extends State<HistoricalRecords> {
         );
         await controller.getHistoricalRecords(widget.id!);
       },
-      child: Container(
-        color: widget.isParent ? Theme.of(context).secondaryHeaderColor : Theme.of(context).primaryColor,
-        padding: widget.isParent ? EdgeInsets.only(top: 10.w) : EdgeInsets.zero,
-        child: Container(
-          padding: EdgeInsets.all(10.w),
-          decoration: BoxDecoration(
-            color: Theme.of(context).primaryColor,
-            borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+      child: Stack(
+        children: [
+          Container(
+            color: widget.isParent ? Theme.of(context).secondaryHeaderColor : Theme.of(context).primaryColor,
+            padding: widget.isParent ? EdgeInsets.only(top: 10.w) : EdgeInsets.zero,
+            child: Container(
+              padding: EdgeInsets.all(10.w),
+              decoration: BoxDecoration(
+                color: Theme.of(context).primaryColor,
+                borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+              ),
+              child: Consumer<HistoricalRecordController>(
+                builder: (context, controller, _) {
+                  if (controller.isLoading) {
+                    return const Center(child: CustomCircularIndicator());
+                  } else if (controller.hasError) {
+                    return ErrorRetryWidget(
+                      message: AppLocalizations.of(context)!.error_server,
+                      onRetry: () {
+                        final controller = Provider.of<HistoricalRecordController>(context, listen: false);
+                        controller.getHistoricalRecords(widget.id!);
+                      },
+                    );
+                  } else if (controller.historicalRecords.isEmpty) {
+                    return Center(
+                      child: Text(
+                        AppLocalizations.of(context)!.no_data,
+                        style: const TextStyle(
+                          color: Colors.black,
+                        ),
+                      ),
+                    );
+                  } else {
+                    return ListView.builder(
+                      itemCount: controller.historicalRecords.length,
+                      itemBuilder: (context, index) {
+                        final record = controller.historicalRecords[index];
+                        return HistoricalRecordWidget(record: record);
+                      },
+                    );
+                  }
+                },
+              ),
+            ),
           ),
-          child: Consumer<HistoricalRecordController>(
-            builder: (context, controller, _) {
-              if (controller.isLoading) {
-                return const Center(child: CustomCircularIndicator());
-              } else if (controller.hasError) {
-                return ErrorRetryWidget(
-                  message: AppLocalizations.of(context)!.error_server,
-                  onRetry: () {
-                    final controller = Provider.of<HistoricalRecordController>(context, listen: false);
-                    controller.getHistoricalRecords(widget.id!);
-                  },
-                );
-              } else if (controller.historicalRecords.isEmpty) {
-                return Center(
-                  child: Text(
-                    AppLocalizations.of(context)!.no_data,
-                    style: const TextStyle(
-                      color: Colors.black,
-                    ),
-                  ),
-                );
-              } else {
-                return ListView.builder(
-                  itemCount: controller.historicalRecords.length,
-                  itemBuilder: (context, index) {
-                    final record = controller.historicalRecords[index];
-                    return HistoricalRecordWidget(record: record);
-                  },
-                );
-              }
-            },
+          if(widget.isParent)
+          Positioned(
+            bottom: 10.h,
+            left: 0,
+            right: 0,
+            child: InkWell(
+              child: Icon(Icons.print, color: Theme.of(context).secondaryHeaderColor, size: 25.h),
+              onTap: () {
+                final controller = Provider.of<HistoricalRecordController>(context, listen: false);
+                if(controller.isLoading || controller.hasError || controller.historicalRecords.isEmpty) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(content: Text(AppLocalizations.of(context)!.no_data)),
+                  );
+                  return;
+                }
+                PdfGeneratorService(context, controller.historicalRecords);
+              },
+            ),
           ),
-        ),
+        ],
       ),
     );
   }

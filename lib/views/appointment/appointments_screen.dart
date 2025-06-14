@@ -51,7 +51,6 @@ class _AppointmentsScreenState extends State<AppointmentsScreen> {
                 padding: EdgeInsets.all(10.w),
                 decoration: BoxDecoration(
                   color: Theme.of(context).primaryColor,
-                  //borderRadius: BorderRadius.circular(20),
                   borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
                 ),
                 child: Consumer<AppointmentController>(

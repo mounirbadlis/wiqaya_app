@@ -7,8 +7,8 @@ class ApiClient {
   final _secureStorage = SecureStorageService();
 
   ApiClient() {
-    dio.options.baseUrl = 'http://192.168.155.165:3001';
-    // dio.options.baseUrl = 'http://10.40.10.225:3001';
+    dio.options.baseUrl = 'http://192.168.160.165:3001';
+    // dio.options.baseUrl = 'http://10.40.15.227:3001';
     dio.options.connectTimeout = const Duration(seconds: 15);
     dio.options.receiveTimeout = const Duration(seconds: 15);
     dio.options.validateStatus = (status) => status != null && status >= 200 && status < 300;
@@ -63,4 +63,5 @@ class ApiClient {
   Future<Response> get(String path, {dynamic data}) => dio.get(path, data: data);
   Future<Response> post(String path, {dynamic data}) => dio.post(path, data: data);
   Future<Response> patch(String path, {dynamic data}) => dio.patch(path, data: data);
+  Future<Response> put(String path, {dynamic data}) => dio.put(path, data: data);
 }

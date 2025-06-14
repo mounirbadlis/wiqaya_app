@@ -4,6 +4,7 @@ class Vaccine {
   final String description;
   final String? pictureUrl;
   final List<int>? requiredAges;
+  final List<String>? sideEffects;
 
   Vaccine({
     required this.id,
@@ -11,6 +12,7 @@ class Vaccine {
     required this.description,      
     this.pictureUrl,
     this.requiredAges,
+    this.sideEffects,
   });
 
   factory Vaccine.fromJson(Map<String, dynamic> json) {
@@ -20,6 +22,7 @@ class Vaccine {
       description: json['description'],
       pictureUrl: json['image_url'] ?? '',
       requiredAges: json['required_ages'] != null ? List<int>.from(json['required_ages']) : null,
+      sideEffects: json['side_effects'] != null ? List<String>.from(json['side_effects']) : null,
     );
   }
 
@@ -30,6 +33,7 @@ class Vaccine {
       'description': description,
       'image_url': pictureUrl,
       'required_ages': requiredAges,
+      'side_effects': sideEffects,
     };
   }
 

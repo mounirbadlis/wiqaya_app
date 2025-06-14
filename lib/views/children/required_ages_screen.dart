@@ -196,7 +196,7 @@ class _RequiredAgesScreenState extends State<RequiredAgesScreen> {
   try {
     setState(() => _isLoading = true);
     await childrenController.addChild(selectedVaccines, context);
-    Navigator.pop(context);
+    Navigator.pushNamed(context, '/main');
   } catch (e) {
     _showSnackBar(e.toString().replaceFirst('Exception: ', ''));
   } finally {

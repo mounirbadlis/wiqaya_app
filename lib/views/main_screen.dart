@@ -7,6 +7,7 @@ import 'package:wiqaya_app/models/user.dart';
 import 'package:wiqaya_app/views/appointment/appointments_screen.dart';
 import 'package:wiqaya_app/views/children/children_screen.dart';
 import 'package:wiqaya_app/views/histrical_record/histrical_records.dart';
+import 'package:wiqaya_app/views/home_screen.dart';
 import 'package:wiqaya_app/widgets/drawer/drawer.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:wiqaya_app/widgets/reminder/reminders_custom_icon.dart';
@@ -21,7 +22,7 @@ class MainScreen extends StatefulWidget {
 class _MainScreenState extends State<MainScreen> {
 
   final List<Widget> _pages = [
-    Center(child: Text('Home Page')),
+    const HomeScreen(),
     const AppointmentsScreen(),
     const ChildrenScreen(),
     HistoricalRecords(id: User.user!.id),
@@ -54,9 +55,9 @@ class _MainScreenState extends State<MainScreen> {
       child: Scaffold(
         drawer: DrawerWidget(),
         appBar: AppBar(
-          backgroundColor: Theme.of(context).secondaryHeaderColor,
-          iconTheme: const IconThemeData(color: Colors.white),
-          title: Text(_getAppBarTitle(), style: Theme.of(context).textTheme.headlineMedium!.copyWith(color: Colors.white)),
+          backgroundColor: widget.selectedIndex == 0 ? Theme.of(context).primaryColor : Theme.of(context).secondaryHeaderColor,
+          iconTheme: IconThemeData(color: widget.selectedIndex == 0 ? Theme.of(context).secondaryHeaderColor : Colors.white),
+          title: widget.selectedIndex == 0 ? null : Text(_getAppBarTitle(), style: Theme.of(context).textTheme.headlineMedium!.copyWith(color: Colors.white)),
           actions: [
             RemindersCustomIcon(),
           ],

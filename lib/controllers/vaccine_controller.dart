@@ -26,6 +26,11 @@ class VaccineController extends ChangeNotifier {
             .map((e) => e['age'] as int)
             .toList();
       }
+      if (vaccine['side_effects'] != null) {
+        vaccine['side_effects'] = (vaccine['side_effects'] as List)
+            .map((e) => e['effect'] as String)
+            .toList();
+      }
     }
 
     vaccines = Vaccine.vaccinesFromJson(data);

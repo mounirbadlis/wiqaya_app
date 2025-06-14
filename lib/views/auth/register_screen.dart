@@ -390,6 +390,14 @@ class _RegisterScreenState extends State<RegisterScreen> {
       final phone = _phoneController.text.trim();
       final gender = _selectedGender!;
       final birthDate = DateFormat('yyyy-MM-dd').format(_selectedBirthDate!);
+      print('first name: $firstName');
+      print('family name: $familyName');
+      print('email: $email');
+      print('password: $password');
+      print('phone: $phone');
+      print('gender: $gender');
+      print('birth date: $birthDate');
+      print('blood type: $_selectedBloodType');
 
       showDialog(
         context: context,

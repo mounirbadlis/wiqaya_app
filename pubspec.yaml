@@ -49,6 +49,8 @@ dependencies:
   iconsax_flutter: ^1.0.0
   mapbox_maps_flutter: ^2.8.0
   geolocator: ^14.0.0
+  pdf: ^3.11.3
+  permission_handler: ^12.0.0+1
 
 dev_dependencies:
   flutter_test:
@@ -79,6 +81,8 @@ flutter:
     - assets/logo/wiqaya_app_logo_white.png
     - assets/icons/hospital_location_icon.png
     - assets/icons/user_position_icon.png
+    - assets/fonts/janna_lt_bold.ttf
+    - assets/fonts/cairo-regular.ttf
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/to/resolution-aware-images

@@ -37,5 +37,21 @@ class ReminderController extends ChangeNotifier {
       notifyListeners();
     }
   }
+
+  Future<void> markAllAsSeen() async {
+    try {
+      final response = await _apiClient.put('/notifications/${User.user!.id}/mark_all_as_seen');
+      for (var reminder in reminders) {
+        reminder.seen = true;
+      }
+      unseenCount = 0;
+    } catch (e) {
+      for (var reminder in reminders) {
+        reminder.seen = false;
+      }
+    } finally {
+      notifyListeners();
+    }
+  }
 }
 

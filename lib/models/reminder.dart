@@ -11,7 +11,7 @@ class Reminder {
   final String title;
   final String message;
   final int type;
-  final bool seen;
+  bool seen;
   final bool isSolved;
 
   Reminder({

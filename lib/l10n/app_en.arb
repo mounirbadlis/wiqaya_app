@@ -59,6 +59,9 @@
 
   "retry": "Retry",
 
+  "hi": "Hi",
+  "today_appointments": "Today's Appointments",
+
   "home": "Home",
   "appointments": "Appointments",
   "my_children": "My Children",
@@ -157,5 +160,12 @@
   "fever": "Fever",
   "treatment": "on Treatment",
   "finding_nearest_center": "Finding nearest center",
-  "no_centers_found": "No centers found"
+  "no_centers_found": "No centers found",
+  "permission_denied": "Permission denied",
+  "pdf_saved": "PDF saved successfully",
+  "created_at": "Created at",
+  "full_name": "Full Name",
+  "parent_name": "Parent Name",
+  "side_effects": "Side Effects",
+  "no_specific_ages": "No specific ages"
 }

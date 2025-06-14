@@ -80,8 +80,8 @@ class _AddChildScreenState extends State<AddChildScreen> {
   Future<void> _selectBirthDate(BuildContext context) async {
     final DateTime? picked = await showDatePicker(
       context: context,
-      initialDate: _selectedBirthDate ?? DateTime(2000),
-      firstDate: DateTime(1900),
+      initialDate: _selectedBirthDate ?? DateTime.now().subtract(Duration(days: 365 * 18)),
+      firstDate: DateTime.now().subtract(Duration(days: 365 * 18)),
       lastDate: DateTime.now(),
     );
     if (picked != null && picked != _selectedBirthDate) {

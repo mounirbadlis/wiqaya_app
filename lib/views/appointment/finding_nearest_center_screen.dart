@@ -17,6 +17,7 @@ import 'package:wiqaya_app/models/user.dart';
 import 'package:wiqaya_app/widgets/shared/custom_circular_indicator.dart';
 import 'package:wiqaya_app/widgets/shared/error_retry_widget.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:wiqaya_app/models/vaccination_center.dart';
 
 class FindingNearestCenterScreen extends StatefulWidget {
   FindingNearestCenterScreen({super.key});
@@ -127,16 +128,22 @@ class _FindingNearestCenterScreenState extends State<FindingNearestCenterScreen>
                           ),
                           ListTile(
                             title: Text(AppLocalizations.of(context)!.center, style: Theme.of(context).textTheme.bodyLarge!.copyWith(color: Colors.black, fontWeight: FontWeight.bold)),
-                            subtitle: Text('${_selectedCenter?.centerName} - (${_calculateDistance(Provider.of<AppointmentController>(context).centersWithDistance[0]['distance']!)})'),
+                            subtitle: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Text('${_selectedCenter?.centerName} - (${_calculateDistance(Provider.of<AppointmentController>(context).centersWithDistance[0]['distance']!)})'),
+                                TextButton(onPressed: () {
+                                  _changeCenter();
+                                }, child: Text(AppLocalizations.of(context)!.change, style: Theme.of(context).textTheme.bodyLarge!.copyWith(color: Theme.of(context).secondaryHeaderColor, fontWeight: FontWeight.bold),)),
+                              ],
+                            ),
                           ),
                           Spacer(),
                           if(_selectedCenter != null)
                           SizedBox(
                             width: double.infinity,
                             child: ElevatedButton(
-                              onPressed: _isLoading ? null : () {
-                                
-                              },
+                              onPressed: _isLoading ? null : _submit,
                               style: ElevatedButton.styleFrom(
                                 backgroundColor: Theme.of(context).secondaryHeaderColor,
                                 padding: EdgeInsets.symmetric(vertical: 14.h),
@@ -364,6 +371,60 @@ class _FindingNearestCenterScreenState extends State<FindingNearestCenterScreen>
       return '${(distance / 1000).toStringAsFixed(1)} ${AppLocalizations.of(context)!.km}';
     }
   }
+
+  
+  void _changeCenter() {
+    final appointmentController = Provider.of<AppointmentController>(context, listen: false);
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: Text(AppLocalizations.of(context)!.change_center),
+          content: SizedBox(
+            width: double.infinity,
+            child: DropdownButtonFormField<Object>(
+              value: _selectedCenter,
+              decoration: InputDecoration(
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(30.r),
+                ),
+                contentPadding: EdgeInsets.symmetric(
+                  vertical: 14.h,
+                ),
+              ),
+              hint: Text(AppLocalizations.of(context)!.select_center, overflow: TextOverflow.ellipsis,),
+              onChanged: (value) {
+                setState(() {
+                  _selectedCenter = value as RecommendationResult?;
+                });
+                _setCenterAnnotation(_mapController!, _selectedCenter!);
+              },
+              items: appointmentController.centersWithDistance.map((center) {
+                return DropdownMenuItem(
+                  value: center['center'],
+                  child: Text('${center['center'].centerName} - ${_calculateDistance(center['distance'])} ${center['nearest'] != null ? '(${AppLocalizations.of(context)!.nearest})' : ''}'),
+                );
+              }).toList(),
+            ),
+          ),
+          actions: [
+            TextButton(
+              child: Text(AppLocalizations.of(context)!.cancel),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+            TextButton(
+              child: Text(AppLocalizations.of(context)!.ok),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
   
   void _showSnackBar(String message) {
     if (!mounted) return;
@@ -374,13 +435,28 @@ class _FindingNearestCenterScreenState extends State<FindingNearestCenterScreen>
 
   void _submit() async {
     final appointmentController = Provider.of<AppointmentController>(context, listen: false);
+    String concernedId;
+    int type;
   
     setState(() {
       _isLoading = true;
      });
   
     try {
-      await appointmentController.bookAppointment(_reminder.childId!, _reminder.vaccineId!, _reminder.bookAfter!, _selectedCenter!.centerId, context);
+      if (_reminder.childId == null) {
+        concernedId = User.user!.id;
+        type = 1;
+      } else {
+        concernedId = _reminder.childId!;
+        type = 2;
+      }
+      await appointmentController.bookAppointment(
+        concernedId,
+        _reminder.vaccineId!,
+        _reminder.bookAfter!,
+        _selectedCenter!.centerId,
+        type,
+        context);
     
     if(mounted) {
       _showSnackBar(AppLocalizations.of(context)!.appointment_booked_successfully);
