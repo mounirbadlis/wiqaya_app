@@ -14,21 +14,6 @@ class ChildrenController extends ChangeNotifier {
   bool isLoading = true;
   bool hasError = false;
 
-  // Future<void> getChildren() async {
-  //   try {
-  //     isLoading = true;
-  //     hasError = false;
-  //     notifyListeners();
-  //     final response = await apiClient.get('/children/${User.user?.id}');
-  //     children = Child.childrenFromJson(response.data);
-  //   } on DioException catch (e) {
-  //     print('getChildren failed: ${e.response?.data}');
-  //     hasError = true;
-  //   } finally {
-  //     isLoading = false;
-  //     notifyListeners();
-  //   }
-  // }
   Future<void> getChildren() async {
   try {
     isLoading = true;
@@ -37,35 +22,23 @@ class ChildrenController extends ChangeNotifier {
 
     final response = await apiClient.get('/children/${User.user?.id}');
     
-    print('getChildren status: ${response.statusCode}');
-    print('getChildren data: ${response.data}');
-
     if (response.statusCode == 200) {
       children = Child.childrenFromJson(response.data);
     } else {
       hasError = true;
-      print('Unexpected status code: ${response.statusCode}');
-    }
-
-  } on DioException catch (e) {
-    print('DioException during getChildren: $e');
-    print('Status code: ${e.response?.statusCode}');
-    print('Error response: ${e.response?.data}');
-    
-    hasError = true;
-
-    if (e.type == DioExceptionType.connectionError ||
-        e.type == DioExceptionType.unknown) {
-      print('Connection error (no internet?)');
-    } else if (e.response?.statusCode == 500) {
-      print('Server error');
-    } else {
-      print('Other Dio error');
     }
 
   } catch (e) {
-    hasError = true;
-    print('Unexpected error during getChildren: $e');
+    children = [];
+    if(e is DioException) {
+      if(e.response?.statusCode == 404) {
+        hasError = false;
+      } else {
+        hasError = true;
+      }
+    } else {
+      hasError = true;
+    }
   } finally {
     isLoading = false;
     notifyListeners();
@@ -80,7 +53,6 @@ class ChildrenController extends ChangeNotifier {
       final response = await apiClient.post('/children', data: {'parent_id': User.user?.id, 'first_name': newChild?.firstName, 'family_name': newChild?.familyName, 'birth_date': intl.DateFormat('yyyy-MM-dd').format(newChild!.birthDate), 'gender': newChild?.gender, 'blood_type': newChild?.bloodType, 'taken_vaccines': takenVaccines});
       newChild = Child.fromJson(response.data);
     } catch (e) {
-      print('Error from server: ${e}');
       if (e is DioException) {
         final status = e.response?.statusCode;
         if (status == 401) {

@@ -7,10 +7,18 @@
   "registration_success": "تم التسجيل بنجاح!",
   "to_register": "لا تمتلك حساب؟ ",
 
+  "profile_updated": "تم تحديث الملف الشخصي بنجاح",
+  "save_changes": "حفظ التغييرات",
+
   "email_hint": "أدخل بريدك الإلكتروني",
   "email": "البريد الإلكتروني",
   "email_required": "يرجى إدخال البريد الإلكتروني",
   "email_invalid": "يرجى إدخال بريد إلكتروني صالح",
+
+  "current_password": "كلمة المرور الحالية",
+  "current_password_required": "كلمة المرور الحالية مطلوبة",
+  "change_password_optional": "تغيير كلمة المرور (اختياري)",
+  "current_password_hint": "أدخل كلمة المرور الحالية",
 
   "password": "كلمة المرور",
   "password_required": "يرجى إدخال كلمة المرور",
@@ -166,5 +174,6 @@
   "completd_name": "الإسم الكامل",
   "parent_name": "اسم الأب",
   "side_effects": "الأعراض الجانبية",
-  "no_specific_ages": "لا يوجد أعمار محددة"
+  "no_specific_ages": "لا يوجد أعمار محددة",
+  "already_taken": "تم تلقي أو حجز هذا اللقاح بالفعل"
 }

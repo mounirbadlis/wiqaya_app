@@ -54,7 +54,7 @@ class ChildHistoryScreen extends StatelessWidget {
             tabs: [
               Tab(child: Padding(
                 padding: EdgeInsets.symmetric(horizontal: 10.w),
-                child: Text(AppLocalizations.of(context)!.personal_info),
+                child: Text(AppLocalizations.of(context)!.personal_info, style: TextStyle(fontSize: 12.sp)),
               )),
               Tab(child: Padding(
                 padding: EdgeInsets.symmetric(horizontal: 10.w),

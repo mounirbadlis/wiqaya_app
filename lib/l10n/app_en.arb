@@ -7,10 +7,18 @@
   "registration_success": "Registration successful!",
   "to_register": "Don't have an account? ",
 
+  "profile_updated": "Profile updated successfully",
+  "save_changes": "Save Changes",
+
   "email_hint": "Enter your email",
   "email": "Email",
   "email_required": "Please enter your email",
   "email_invalid": "Please enter a valid email",
+
+  "current_password": "Current Password",
+  "current_password_required": "Current password is required",
+  "change_password_optional": "Change Password (Optional)",
+  "current_password_hint": "Enter your current password",
 
   "password": "Password",
   "password_required": "Please enter your password",
@@ -167,5 +175,6 @@
   "full_name": "Full Name",
   "parent_name": "Parent Name",
   "side_effects": "Side Effects",
-  "no_specific_ages": "No specific ages"
+  "no_specific_ages": "No specific ages",
+  "already_taken": "You have already taken or booked this vaccine"
 }

@@ -27,6 +27,7 @@ import 'package:wiqaya_app/views/children/child_history_screen.dart';
 import 'package:wiqaya_app/views/children/children_screen.dart';
 import 'package:wiqaya_app/views/children/required_ages_screen.dart';
 import 'package:wiqaya_app/views/main_screen.dart';
+import 'package:wiqaya_app/views/profile/profile_screen.dart';
 import 'package:wiqaya_app/views/reminder/reminders_screen.dart';
 import 'package:wiqaya_app/views/splash_screen.dart';
 import 'package:wiqaya_app/views/vaccine/vaccine_details_screen.dart';
@@ -210,6 +211,9 @@ class MyApp extends StatelessWidget {
         '/welcome': (context) => const WelcomeScreen(),
         '/login': (context) => const LoginScreen(),
         '/register': (context) => const RegisterScreen(),
+
+        //profile
+        '/profile': (context) => const ProfileScreen(),
       },
     );
   }

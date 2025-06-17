@@ -197,4 +197,44 @@ class AuthController extends ChangeNotifier {
     _refreshToken = await _secureStorage.read('refresh_token');
     return _accessToken != null;
   }
+
+  Future editProfile({required String email, required String firstName, required String familyName, required String phone, required String currentPassword, required String password, required BuildContext context}) async {
+    try {
+      Map<String, dynamic> data = {
+        'id': _user!.userId,
+        'first_name': firstName,
+        'family_name': familyName,
+        'phone': phone,
+        'current_password': currentPassword,
+        'password': password,
+        'role': 3
+      };
+      if(email.trim() != _user!.email) {
+        data['email'] = email;
+      }
+      final response = await _apiClient.put('/auth/edit-user-info',
+        data: data,
+      );
+      print('Edit profile successful: ${response.data}');
+      _user = User.fromJson(response.data);
+      User.user = _user;
+      notifyListeners();
+    } on DioException catch (e) {
+      print('Error from server: ${e.response?.data}');
+      final status = e.response?.statusCode;
+      if (status == 400) {
+        throw Exception(AppLocalizations.of(context)!.error_email_or_phone_exists);
+      } else if (status == 404) {
+        throw Exception(AppLocalizations.of(context)!.error_user_not_found);
+      } else if (status == 401) {
+        throw Exception(AppLocalizations.of(context)!.error_invalid_password);
+      } else if (status == 500) {
+        throw Exception(AppLocalizations.of(context)!.error_server);
+      } else {
+        throw Exception(
+          AppLocalizations.of(context)!.error_connection,
+        );
+      }
+    }
+  }
 }

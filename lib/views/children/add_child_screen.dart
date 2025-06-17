@@ -1,40 +1,3 @@
-// import 'package:flutter/material.dart';
-// import 'package:wiqaya_app/views/main_screen.dart';
-// import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-
-// class AddChildScreen extends StatefulWidget {
-//   const AddChildScreen({super.key});
-
-//   @override
-//   State<AddChildScreen> createState() => _AddChildScreenState();
-// }
-
-// class _AddChildScreenState extends State<AddChildScreen> {
-//   @override
-//   Widget build(BuildContext context) {
-//     return PopScope(
-//       canPop: false,
-//       onPopInvokedWithResult: (didPop, result) {
-//         if (!didPop) {
-//           Navigator.pushNamed(context, '/main', arguments: MainScreen(selectedIndex: 2));
-//         }
-//       },
-//       child: Scaffold(
-//         appBar: AppBar(
-//           backgroundColor: Theme.of(context).secondaryHeaderColor,
-//           leading: IconButton(
-//             icon: const Icon(Icons.arrow_back, color: Colors.white),
-//             onPressed: () {
-//               Navigator.pushNamed(context, '/main', arguments: MainScreen(selectedIndex: 2));
-//             },
-//           ),
-//           title: Text(AppLocalizations.of(context)!.add_child, style: Theme.of(context).textTheme.headlineMedium!.copyWith(color: Colors.white)),
-//         ),
-//         body: const Placeholder(),
-//       ),
-//     );
-//   }
-// }
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:wiqaya_app/controllers/children_controller.dart';
@@ -75,20 +38,6 @@ class _AddChildScreenState extends State<AddChildScreen> {
     _firstNameController.dispose();
     _familyNameController.dispose();
     super.dispose();
-  }
-
-  Future<void> _selectBirthDate(BuildContext context) async {
-    final DateTime? picked = await showDatePicker(
-      context: context,
-      initialDate: _selectedBirthDate ?? DateTime.now().subtract(Duration(days: 365 * 18)),
-      firstDate: DateTime.now().subtract(Duration(days: 365 * 18)),
-      lastDate: DateTime.now(),
-    );
-    if (picked != null && picked != _selectedBirthDate) {
-      setState(() {
-        _selectedBirthDate = picked;
-      });
-    }
   }
 
   @override
@@ -320,5 +269,20 @@ class _AddChildScreenState extends State<AddChildScreen> {
         SizedBox(height: 20.h),
       ],
     );
+  }
+
+  Future<void> _selectBirthDate(BuildContext context) async {
+    final DateTime? picked = await showDatePicker(
+      context: context,
+      //initialDate: _selectedBirthDate ?? DateTime.now().subtract(Duration(days: 365 * 18)),
+      initialDate: _selectedBirthDate ?? User.user!.birthDate.add(Duration(days: 365 * 19)),
+      firstDate: User.user!.birthDate.add(Duration(days: 365 * 19)),
+      lastDate: DateTime.now(),
+    );
+    if (picked != null && picked != _selectedBirthDate) {
+      setState(() {
+        _selectedBirthDate = picked;
+      });
+    }
   }
 }

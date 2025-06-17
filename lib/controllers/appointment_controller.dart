@@ -39,7 +39,15 @@ class AppointmentController extends ChangeNotifier {
     } catch (e) {
       print('getAppointments failed: $e');
       appointments = [];
-      hasError = true;
+      if(e is DioException) {
+        if(e.response?.statusCode == 404) {
+          hasError = false;
+        } else {
+          hasError = true;
+        }
+      } else {
+        hasError = true;
+      }
     } finally {
       isLoading = false;
       notifyListeners();
@@ -56,7 +64,15 @@ class AppointmentController extends ChangeNotifier {
     } catch (e) {
       print('getTodayAppointments failed: $e');
       appointments = [];
-      isTodayAppointmentsError = true;
+      if(e is DioException) {
+        if(e.response?.statusCode == 404) {
+          isTodayAppointmentsError = false;
+        } else {
+          isTodayAppointmentsError = true;
+        }
+      } else {
+        isTodayAppointmentsError = true;
+      }
     } finally {
       isTodayAppointmentsLoading = false;
       notifyListeners();
@@ -76,7 +92,15 @@ class AppointmentController extends ChangeNotifier {
     } catch (e) {
       print('getAvailableDaysForVaccine failed: $e');
       availableDays = [];
-      hasError = true;
+      if(e is DioException) {
+        if(e.response?.statusCode == 404) {
+          hasError = false;
+        } else {
+          hasError = true;
+        }
+      } else {
+        hasError = true;
+      }
     } finally {
       isLoading = false;
       notifyListeners();
@@ -105,7 +129,15 @@ class AppointmentController extends ChangeNotifier {
     } catch (e) {
       print('getAvailableCentersForDay failed: $e');
       availableCenters = [];
-      isAvailableCentersError = true;
+      if(e is DioException) {
+        if(e.response?.statusCode == 404) {
+          isAvailableCentersError = false;
+        } else {
+          isAvailableCentersError = true;
+        }
+      } else {
+        isAvailableCentersError = true;
+      }
     } finally {
       isAvailableCentersLoading = false;
       notifyListeners();
@@ -153,6 +185,7 @@ class AppointmentController extends ChangeNotifier {
         'date': date.toIso8601String(),
         'center_id': centerId,
         'type': type,
+        'manual': true,
       });
       if(response.statusCode == 201) {
         newAppointment = Appointment.fromJson(response.data);
@@ -161,6 +194,8 @@ class AppointmentController extends ChangeNotifier {
       print('bookAppointment failed: $e');
       if(e.response?.statusCode == 400) {
         throw Exception(AppLocalizations.of(context)!.no_available_slots);
+      } else if(e.response?.statusCode == 422) {
+        throw Exception(AppLocalizations.of(context)!.already_taken);
       } else if(e.response?.statusCode == 500) {
         throw Exception(AppLocalizations.of(context)!.error_server);
       } else {
@@ -197,7 +232,7 @@ class AppointmentController extends ChangeNotifier {
     try {
       final response = await _apiClient.patch('/appointments', data: {
         'id': selectedAppointment?.id,
-        'status': 4,
+        'status': 3,
       });
       if(response.statusCode == 204) {
         selectedAppointment = null;

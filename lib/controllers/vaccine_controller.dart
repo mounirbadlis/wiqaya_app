@@ -36,7 +36,15 @@ class VaccineController extends ChangeNotifier {
     vaccines = Vaccine.vaccinesFromJson(data);
   } catch (e) {
     vaccines = [];
-    hasError = true;
+    if(e is DioException) {
+      if(e.response?.statusCode == 404) {
+        hasError = false;
+      } else {
+        hasError = true;
+      }
+    } else {
+      hasError = true;
+    }
   } finally {
     isLoading = false;
     notifyListeners();

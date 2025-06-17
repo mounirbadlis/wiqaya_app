@@ -270,6 +270,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         InkWell(
                           onTap: () {
                             // Navigate to profile
+                            Navigator.pushNamed(context, '/profile');
                           },
                           borderRadius: BorderRadius.circular(12.r),
                           child: Container(
