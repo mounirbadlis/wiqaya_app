@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import 'package:wiqaya_app/controllers/vaccine_controller.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:wiqaya_app/models/vaccine.dart';
+import 'package:hugeicons/hugeicons.dart';
 
 class VaccineDetailsScreen extends StatelessWidget {
   VaccineDetailsScreen({super.key});
@@ -43,6 +44,15 @@ class VaccineDetailsScreen extends StatelessWidget {
                   width: double.infinity,
                   height: 200.h,
                   fit: BoxFit.cover,
+                  errorBuilder: (context, error, stackTrace) {
+                    return Container(
+                      width: double.infinity,
+                      height: 200.h,
+                      alignment: Alignment.center,
+                      color: Colors.grey[500],
+                      child: Icon(HugeIcons.strokeRoundedImageNotFound01, size: 60.w),
+                    );
+                  },
                 ),
               ),
               SizedBox(height: 16.h),

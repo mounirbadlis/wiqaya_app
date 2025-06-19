@@ -75,6 +75,8 @@
   "my_children": "My Children",
   "record": "Record",
   "vaccines": "Vaccines",
+  "centers": "Centers",
+  "postponed_appointments": "Postponed Appointments",
 
   "welcome": "Welcome",
   "blood_type": "Blood Type",
@@ -176,5 +178,13 @@
   "parent_name": "Parent Name",
   "side_effects": "Side Effects",
   "no_specific_ages": "No specific ages",
-  "already_taken": "You have already taken or booked this vaccine"
+  "already_taken": "You have already taken or booked this vaccine",
+  "appointment_cancelled": "Appointment cancelled successfully",
+  "confirmation": "Confirmation",
+  "make_sure": "We just wanna make sure you are well before booking the appointment.",
+  "fever_selected_reason": "You can't book an appointment if you have a fever.",
+  "treatment_selected_reason": "You can't book an appointment if you are under treatment.",
+  "close": "Close",
+  "navigate": "Navigate",
+  "loading_centers": "Loading centers..."
 }

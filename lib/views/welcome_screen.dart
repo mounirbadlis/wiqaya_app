@@ -63,10 +63,7 @@ class WelcomeScreen extends StatelessWidget {
                       backgroundColor: Theme.of(context).secondaryHeaderColor,
                       padding: EdgeInsets.symmetric(vertical: 14.h),
                     ),
-                    child: Text(
-                      AppLocalizations.of(context)!.login,
-                      style: TextStyle(color: Colors.white, fontSize: 16.sp),
-                    ),
+                    child: Text(AppLocalizations.of(context)!.login, style: Theme.of(context).textTheme.labelLarge!.copyWith(color: Colors.white),),
                   ),
                 ),
       
@@ -83,7 +80,7 @@ class WelcomeScreen extends StatelessWidget {
                     ),
                     child: Text(
                       AppLocalizations.of(context)!.register,
-                      style: TextStyle(color: Colors.black, fontSize: 16.sp),
+                      style: Theme.of(context).textTheme.labelLarge!.copyWith(color: Colors.black),
                     ),
                   ),
                 ),

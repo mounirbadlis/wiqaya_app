@@ -5,6 +5,7 @@ import 'package:wiqaya_app/controllers/appointment_controller.dart';
 import 'package:wiqaya_app/models/user.dart';
 import 'package:wiqaya_app/widgets/appointment/appointment_widget.dart';
 import 'package:wiqaya_app/widgets/shared/add_button.dart';
+import 'package:wiqaya_app/widgets/shared/ask_questions_manual_dialog.dart';
 import 'package:wiqaya_app/widgets/shared/custom_circular_indicator.dart';
 import 'package:wiqaya_app/widgets/shared/error_retry_widget.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -98,7 +99,7 @@ class _AppointmentsScreenState extends State<AppointmentsScreen> {
                 child: AddButton(
                   title: AppLocalizations.of(context)!.book_appointment,
                   onTap: () {
-                    Navigator.pushNamed(context, '/appointments/book');
+                    AskQuestionsManualDialog.show(context);
                   },
                 ),
               ),

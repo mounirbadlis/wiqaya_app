@@ -67,11 +67,30 @@ class DrawerWidget extends StatelessWidget {
           ),
 
           // Quick Actions
+          //vaccines
           ListTile(
             leading: const Icon(HugeIcons.strokeRoundedVaccine),
             title: Text(AppLocalizations.of(context)!.vaccines),
             onTap: () {
               Navigator.pushNamed(context, '/vaccines');
+            },
+          ),
+
+          //centers
+          ListTile(
+            leading: const Icon(HugeIcons.strokeRoundedHospital01),
+            title: Text(AppLocalizations.of(context)!.centers),
+            onTap: () {
+              Navigator.pushNamed(context, '/centers');
+            },
+          ),
+
+          //postponed appointments
+          ListTile(
+            leading: const Icon(HugeIcons.strokeRoundedAppointment02),
+            title: Text(AppLocalizations.of(context)!.postponed_appointments),
+            onTap: () {
+              Navigator.pushNamed(context, '/appointments/postponed');
             },
           ),
 

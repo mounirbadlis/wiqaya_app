@@ -161,6 +161,7 @@ import 'package:wiqaya_app/controllers/appointment_controller.dart';
 import 'package:wiqaya_app/models/appointment.dart';
 import 'package:wiqaya_app/models/user.dart';
 import 'package:wiqaya_app/providers/locale_provider.dart';
+import 'package:wiqaya_app/widgets/shared/ask_questions_manual_dialog.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -362,7 +363,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           HugeIcons.strokeRoundedAiScheduling,
                           AppLocalizations.of(context)!.book_appointment,
                           Colors.blue,
-                          () { Navigator.pushNamed(context, '/appointments/book'); }
+                          () { AskQuestionsManualDialog.show(context); }
                         ),
                       ],
                     ),

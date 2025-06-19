@@ -27,6 +27,7 @@ class _AppointmentDetailsScreenState extends State<AppointmentDetailsScreen> {
   final ApiClient _apiClient = ApiClient();
   List<Map<String, double>> _routePoints = [];
   bool _isLoading = false;
+  bool _isCanceling = false;
   String _distance = '';
   PointAnnotationManager? _pointAnnotationManager;
 
@@ -128,7 +129,22 @@ class _AppointmentDetailsScreenState extends State<AppointmentDetailsScreen> {
               ListTile(
                 leading: Icon(Icons.person_rounded, color: Theme.of(context).secondaryHeaderColor),
                 title: Text(_setName(), style: Theme.of(context).textTheme.bodyLarge!),
-              )
+              ),
+              if(appointment.status == 1) ...[
+                Spacer(),
+                Container(
+                  width: double.infinity,
+                  margin: EdgeInsets.symmetric(horizontal: 20.w),
+                  child: ElevatedButton(
+                    onPressed: () {_cancelAppointment();},
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.red,
+                      padding: EdgeInsets.symmetric(vertical: 14.h),
+                    ),
+                    child: Text(AppLocalizations.of(context)!.cancel, style: Theme.of(context).textTheme.labelLarge!.copyWith(color: Colors.white),),
+                  ),
+                ),
+              ]
             ],
           ),
         ),
@@ -181,6 +197,7 @@ class _AppointmentDetailsScreenState extends State<AppointmentDetailsScreen> {
     }
     final position = await geo.Geolocator.getCurrentPosition();
     _setUserAnnotation(_mapController!, Point(coordinates: Position(position.longitude, position.latitude)));
+    if (!mounted) return; // Check if widget is still mounted
     // Build Mapbox Directions API URL
     final accessToken =
         'pk.eyJ1IjoibW91bmlyYmFkbGlzMiIsImEiOiJjbTl6emg5YjgwaGRyMmxzZng1cTkxa256In0.FCAWFO7Iqz5t4u2dGqSDwA'; // Replace with real token
@@ -351,6 +368,32 @@ class _AppointmentDetailsScreenState extends State<AppointmentDetailsScreen> {
     } else {
       // Manually concatenate 'For: ' with the names to avoid using the reserved keyword
       return '${appointment.firstName} ${appointment.familyName}';
+    }
+  }
+
+  void _showSnackBar(String message) {
+    if (!mounted) return;
+    ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(message)));
+  }
+
+  Future<void> _cancelAppointment() async {
+    setState(() {
+      _isCanceling = true;
+    });
+    try {
+      final controller = Provider.of<AppointmentController>(context, listen: false);
+      await controller.cancelAppointment(context);
+      if(mounted) {
+        _showSnackBar(AppLocalizations.of(context)!.appointment_cancelled);
+      }
+    } catch (e) {
+      if(mounted) {
+        _showSnackBar(e.toString().replaceFirst('Exception: ', ''));
+      }
+    } finally {
+      setState(() {
+        _isCanceling = false;
+      });
     }
   }
 }

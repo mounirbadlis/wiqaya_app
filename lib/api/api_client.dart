@@ -8,7 +8,7 @@ class ApiClient {
 
   ApiClient() {
     dio.options.baseUrl = 'http://192.168.160.165:3001';
-    // dio.options.baseUrl = 'http://10.40.15.227:3001';
+    //dio.options.baseUrl = 'http://10.40.11.220:3001';
     dio.options.connectTimeout = const Duration(seconds: 15);
     dio.options.receiveTimeout = const Duration(seconds: 15);
     dio.options.validateStatus = (status) => status != null && status >= 200 && status < 300;

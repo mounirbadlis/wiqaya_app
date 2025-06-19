@@ -74,6 +74,8 @@
   "my_children": "أطفالي",
   "record": "السجل",
   "vaccines": "اللقاحات",
+  "centers": "المراكز",
+  "postponed_appointments": "المواعيد المؤجلة",
 
   "welcome": "مرحبًا",
   "blood_type": "فصيلة الدم",
@@ -175,5 +177,13 @@
   "parent_name": "اسم الأب",
   "side_effects": "الأعراض الجانبية",
   "no_specific_ages": "لا يوجد أعمار محددة",
-  "already_taken": "تم تلقي أو حجز هذا اللقاح بالفعل"
+  "already_taken": "تم تلقي أو حجز هذا اللقاح بالفعل",
+  "appointment_cancelled": "تم إلغاء الموعد بنجاح",
+  "confirmation": "تأكيد",
+  "make_sure": "نحن فقط نريد التأكد من أنك بخير قبل حجز الموعد.",
+  "fever_selected_reason": "لا يمكن حجز الموعد إذا كنت مصاب بحمى.",
+  "treatment_selected_reason": "لا يمكن حجز الموعد إذا كنت تحت العلاج.",
+  "close": "إغلاق",
+  "navigate": "اتباع",
+  "loading_centers": "جاري تحميل المراكز..."
 }

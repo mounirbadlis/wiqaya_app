@@ -13,6 +13,8 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 class AppointmentController extends ChangeNotifier {
   final ApiClient _apiClient = ApiClient();
   List<Appointment> appointments = [];
+  List<PostponedVaccination> postponedVaccinations = [];
+  PostponedVaccination? selectedPostponedVaccination;
   Appointment? selectedAppointment;
   Appointment? newAppointment;
   PostponedVaccination? postponedVaccination;
@@ -39,6 +41,31 @@ class AppointmentController extends ChangeNotifier {
     } catch (e) {
       print('getAppointments failed: $e');
       appointments = [];
+      if(e is DioException) {
+        if(e.response?.statusCode == 404) {
+          hasError = false;
+        } else {
+          hasError = true;
+        }
+      } else {
+        hasError = true;
+      }
+    } finally {
+      isLoading = false;
+      notifyListeners();
+    }
+  }
+
+  Future<void> getPostponedVaccinations(String id) async {
+    try {
+      isLoading = true;
+      hasError = false;
+      notifyListeners();
+      final response = await _apiClient.get('/postponing/$id');
+      postponedVaccinations = PostponedVaccination.postponedVaccinationsFromJson(response.data);
+    } catch (e) {
+      print('getPostponedVaccinations failed: $e');
+      postponedVaccinations = [];
       if(e is DioException) {
         if(e.response?.statusCode == 404) {
           hasError = false;
@@ -191,7 +218,7 @@ class AppointmentController extends ChangeNotifier {
         newAppointment = Appointment.fromJson(response.data);
       }
     } on DioException catch (e) {
-      print('bookAppointment failed: $e');
+      print('bookAppointment failed: ${e.response?.data}');
       if(e.response?.statusCode == 400) {
         throw Exception(AppLocalizations.of(context)!.no_available_slots);
       } else if(e.response?.statusCode == 422) {
@@ -230,12 +257,11 @@ class AppointmentController extends ChangeNotifier {
 
   Future<void> cancelAppointment(BuildContext context) async {
     try {
-      final response = await _apiClient.patch('/appointments', data: {
+      final response = await _apiClient.patch('/appointments/cancel', data: {
         'id': selectedAppointment?.id,
-        'status': 3,
       });
-      if(response.statusCode == 204) {
-        selectedAppointment = null;
+      if(response.statusCode == 200) {
+        selectedAppointment!.status = 3;
       }
     } on DioException catch (e) {
       if(e.response?.statusCode == 500) {
@@ -243,6 +269,8 @@ class AppointmentController extends ChangeNotifier {
       } else {
         throw Exception(AppLocalizations.of(context)!.error_connection);
       }
+    } finally {
+      notifyListeners();
     }
   }
 }

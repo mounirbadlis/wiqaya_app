@@ -8,6 +8,7 @@ import 'package:provider/provider.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:wiqaya_app/controllers/appointment_controller.dart';
 import 'package:wiqaya_app/controllers/auth_controller.dart';
+import 'package:wiqaya_app/controllers/center_controller.dart';
 import 'package:wiqaya_app/controllers/children_controller.dart';
 import 'package:wiqaya_app/controllers/historical_record_controller.dart';
 import 'package:wiqaya_app/controllers/vaccine_controller.dart';
@@ -20,8 +21,10 @@ import 'package:wiqaya_app/views/appointment/book_appointment_screen.dart';
 import 'package:wiqaya_app/views/appointment/finding_nearest_center_screen.dart';
 import 'package:wiqaya_app/views/appointment/health_questions_screen.dart';
 import 'package:wiqaya_app/views/appointment/posponing_result_screen.dart';
+import 'package:wiqaya_app/views/appointment/postponed_Appointments_screen.dart';
 import 'package:wiqaya_app/views/auth/login_screen.dart';
 import 'package:wiqaya_app/views/auth/register_screen.dart';
+import 'package:wiqaya_app/views/center/centers_screen.dart';
 import 'package:wiqaya_app/views/children/add_child_screen.dart';
 import 'package:wiqaya_app/views/children/child_history_screen.dart';
 import 'package:wiqaya_app/views/children/children_screen.dart';
@@ -64,6 +67,7 @@ Future<void> main() async {
         ChangeNotifierProvider(create: (_) => VaccineController()),
         ChangeNotifierProvider(create: (_) => AppointmentController()),
         ChangeNotifierProvider(create: (_) => ReminderController()),
+        ChangeNotifierProvider(create: (_) => CenterController()),
       ],
       child: ScreenUtilInit(
         //designSize: const ui.Size(375, 812),
@@ -193,8 +197,12 @@ class MyApp extends StatelessWidget {
         '/vaccines': (context) => const VaccinesScreen(),
         '/vaccines/vaccine_details': (context) => VaccineDetailsScreen(),
 
+        //centers
+        '/centers': (context) => const CentersScreen(),
+
         //appointments
         '/appointments': (context) => const AppointmentsScreen(),
+        '/appointments/postponed': (context) => const PostponedAppointmentsScreen(),
         '/appointments/details': (context) => AppointmentDetailsScreen(),
         '/appointments/book': (context) => const BookAppointmentScreen(),
         '/appointments/health_questions': (context) => const HealthQuestionsScreen(),
